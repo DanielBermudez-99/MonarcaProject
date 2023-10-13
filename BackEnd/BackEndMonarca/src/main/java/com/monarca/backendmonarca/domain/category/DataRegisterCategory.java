@@ -1,4 +1,4 @@
 package com.monarca.backendmonarca.domain.category;
 
-public class category {
+public record DataRegisterCategory (String name) {
 }

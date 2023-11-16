@@ -14,7 +14,7 @@ function YourApplication() {
             </TableHeader>
             <TableBody>
                 <TableRow key="1">
-                    <TableCell>Tony Reichert</TableCell>
+                    <TableCell>Daniel Bermudez</TableCell>
                     <TableCell>CEO</TableCell>
                     <TableCell>Active</TableCell>
                     <TableCell><Dropdown>

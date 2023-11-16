@@ -1,14 +1,17 @@
 import * as React from "react";
-import YourApplication from "./components/YourApplication.jsx";
-// 1. import `NextUIProvider` component
+// import User from "./components/Users/User.jsx";
+import NavBar from "./components/Navbar/NavBar.jsx";
+// import Product from "./components/Products/Product.jsx";
+import Login from "./components/Auth/Login.jsx";
 import {NextUIProvider} from "@nextui-org/react";
 
 
 function App() {
-  // 2. Wrap NextUIProvider at the root of your app
+
   return (
     <NextUIProvider>
-      <YourApplication/>
+      <NavBar className = "navbar"/>,
+      <Login className = "login"/>,
     </NextUIProvider>
   );
 }

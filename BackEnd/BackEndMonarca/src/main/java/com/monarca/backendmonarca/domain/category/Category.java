@@ -20,3 +20,4 @@ public class Category {
         this.name = dataRegisterCategory.name();
     }
 }
+

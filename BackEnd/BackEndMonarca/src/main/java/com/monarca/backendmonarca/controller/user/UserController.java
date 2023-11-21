@@ -1,9 +1,6 @@
 package com.monarca.backendmonarca.controller.user;
 
-import com.monarca.backendmonarca.domain.user.DataRegisterUser;
-import com.monarca.backendmonarca.domain.user.DataUpdateUser;
-import com.monarca.backendmonarca.domain.user.User;
-import com.monarca.backendmonarca.domain.user.UserRepository;
+import com.monarca.backendmonarca.domain.user.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,31 +12,34 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserRepository UserRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private CrudRepositoryUser crudRepositoryUser;
 
     @PostMapping
     public ResponseEntity<User> crearUsuario(@RequestBody DataRegisterUser dataRegisterUser) {
-        User newUser = UserRepository.save(new User(dataRegisterUser));
+        User newUser = userRepository.save(new User(dataRegisterUser));
         return ResponseEntity.ok(newUser);
     }
 
     @GetMapping
     public ResponseEntity<?> obtenerUsuarios(){
-        return ResponseEntity.ok(UserRepository.findAll());
+        return ResponseEntity.ok(userRepository.findAll());
     }
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> actualizarUsuario(@PathVariable Integer id, @RequestBody DataUpdateUser dataUpdateUser){
-        User user = UserRepository.getReferenceById(id);
+    public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @RequestBody DataUpdateUser dataUpdateUser){
+        User user = crudRepositoryUser.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         user.dataUpdate(dataUpdateUser);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<?> eliminarUsuario(@PathVariable Integer id){
-        UserRepository.deleteById(id);
+    public ResponseEntity<?> eliminarUsuario(@PathVariable Long id){
+        crudRepositoryUser.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

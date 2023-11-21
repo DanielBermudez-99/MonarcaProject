@@ -3,7 +3,7 @@ create table user(
  name varchar(30) not null,
  lastname varchar(30) not null,
  username varchar(50) not null,
- password varchar(20) not null,
+ password varchar(300) not null,
  email varchar(50) not null,
  phone varchar(15) not null,
  location varchar(50) not null,

@@ -12,8 +12,8 @@ function App() {
     
     <NextUIProvider>
       <NavBar/>
-      {/* <Product/> */}
       <Login/> 
+      <Product/>
     </NextUIProvider>
   );
 }

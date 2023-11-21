@@ -42,6 +42,10 @@ public class User {
     @Column(name = "role_user")
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Column(name = "disabled")
+    private boolean disabled;
+    @Column(name = "locked")
+    private boolean locked;
 
     public User ( DataRegisterUser dataRegisterUser){
         this.name = dataRegisterUser.name();
@@ -58,6 +62,8 @@ public class User {
         this.number = dataRegisterUser.number();
         this.date_register = LocalDate.now();
         this.role = Role.USER;
+        this.disabled = false;
+        this.locked = false;
     }
 
     public void dataUpdate(DataUpdateUser dataUpdateUser){
@@ -98,6 +104,15 @@ public class User {
         if (dataUpdateUser.number() != null) {
             this.number = dataUpdateUser.number();
         }
+
+    }
+
+    public boolean getLocked() {
+        return this.locked;
+    }
+
+    public boolean getDisabled() {
+        return this.disabled;
     }
 }
 

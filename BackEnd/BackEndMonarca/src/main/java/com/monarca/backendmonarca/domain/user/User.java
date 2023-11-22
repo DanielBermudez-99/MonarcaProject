@@ -114,5 +114,10 @@ public class User {
     public boolean getDisabled() {
         return this.disabled;
     }
+
+
+    public String getRoles() {
+        return this.role.name();
+    }
 }
 

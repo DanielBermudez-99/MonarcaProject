@@ -19,15 +19,22 @@ public class UserSecurityService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findById(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User" + username + "not found"));
+    public UserDetails loadUserByUsername(String rol_user) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(rol_user);
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + rol_user + " not found");
+        }
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles("ADMIN")
+                .roles(user.getRoles())
                 .accountLocked(user.getLocked())
                 .disabled(user.getDisabled())
                 .build();
     }
 }
+
+
+
+
+

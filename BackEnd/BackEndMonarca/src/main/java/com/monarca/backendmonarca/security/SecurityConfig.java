@@ -20,26 +20,18 @@ public class SecurityConfig {
         http
                 //Desactivamos el csrf para lograr acceder a la api
                 .csrf(csrf -> csrf.disable())
-
                 .cors()
-
                 .and()
-
                 //Para las peticiones
                 .authorizeRequests()
-
                 //Establecemos los permisos de acceso al endpoint
                 //Rol CUSTOMER                              //Rol CUSTOMER
-                .requestMatchers(HttpMethod.GET, "/user").hasAnyRole("CUSTOMER", "ADMIN")
-
-                                                            //Rol ADMIn
+                .requestMatchers(HttpMethod.GET, "/user").hasAnyRole("ADMIN")
+                //Rol ADMIn
                 .requestMatchers(HttpMethod.POST, "/user").hasRole("ADMIN")
-
                 //Ejemplo de denegación
                 .requestMatchers(HttpMethod.PUT, "/userId").hasRole("ADMIN")
-
                 .requestMatchers(HttpMethod.DELETE, "/userId").hasRole("ADMIN")
-
                 //Cualquier peticion debe estar
                 .anyRequest()
                 //autenticada

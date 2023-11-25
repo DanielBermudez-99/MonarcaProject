@@ -25,6 +25,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> obtenerUsuarios(){
+
         return ResponseEntity.ok(userRepository.findAll());
     }
 

@@ -17,6 +17,7 @@ public class Category {
     private String name;
 
     public Category ( DataRegisterCategory dataRegisterCategory){
+
         this.name = dataRegisterCategory.name();
     }
 }

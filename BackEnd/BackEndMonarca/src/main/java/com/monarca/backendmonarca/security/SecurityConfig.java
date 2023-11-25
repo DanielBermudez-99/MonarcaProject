@@ -26,12 +26,14 @@ public class SecurityConfig {
                 .authorizeRequests()
                 //Establecemos los permisos de acceso al endpoint
                 //Rol CUSTOMER                              //Rol CUSTOMER
-                .requestMatchers(HttpMethod.GET, "/user").hasAnyRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/user").hasAnyRole("USER","ADMIN")
                 //Rol ADMIn
                 .requestMatchers(HttpMethod.POST, "/user").hasRole("ADMIN")
                 //Ejemplo de denegación
                 .requestMatchers(HttpMethod.PUT, "/userId").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/userId").hasRole("ADMIN")
+
+                .requestMatchers(HttpMethod.GET, "/product").hasAnyRole("USER")
                 //Cualquier peticion debe estar
                 .anyRequest()
                 //autenticada
@@ -44,23 +46,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-
-    //Implementando la autenticación en memoria o almacenamiento en memoria
-//    @Bean
-//    public UserDetailsService memoryUsers() {
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .roles("ADMIN")
-//                .build();
-//        UserDetails user = User.builder()
-//                .username("customer")
-//                .password(passwordEncoder().encode("customer"))
-//                .roles("CUSTOMER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(admin, user);
-//    }
 
 
 

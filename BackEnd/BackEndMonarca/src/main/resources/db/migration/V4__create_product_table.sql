@@ -1,7 +1,7 @@
 create table product(
   id bigint not null auto_increment,
   name VARCHAR(150) NOT NULL,
-  description VARCHAR NOT NULL,
+  description VARCHAR(200) NOT NULL,
   stock INT NOT NULL,
   price DECIMAL(10,2) NOT NULL,
   image BLOB NOT NULL,

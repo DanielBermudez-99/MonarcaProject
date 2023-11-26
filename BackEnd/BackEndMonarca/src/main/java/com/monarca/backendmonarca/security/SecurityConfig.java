@@ -22,25 +22,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors()
                 .and()
-                //Para las peticiones
                 .authorizeRequests()
-                //Establecemos los permisos de acceso al endpoint
-                //Rol CUSTOMER                              //Rol CUSTOMER
                 .requestMatchers(HttpMethod.GET, "/user").hasAnyRole("USER","ADMIN")
-                //Rol ADMIn
                 .requestMatchers(HttpMethod.POST, "/user").hasRole("ADMIN")
-                //Ejemplo de denegación
                 .requestMatchers(HttpMethod.PUT, "/userId").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/userId").hasRole("ADMIN")
-
                 .requestMatchers(HttpMethod.GET, "/product").hasAnyRole("USER")
-                //Cualquier peticion debe estar
                 .anyRequest()
-                //autenticada
                 .authenticated()
-                // y debe estar autenticado con
                 .and()
-                //Autenticacion basica
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();

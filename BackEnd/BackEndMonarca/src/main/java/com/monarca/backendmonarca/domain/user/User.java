@@ -1,6 +1,8 @@
 package com.monarca.backendmonarca.domain.user;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.sql.ConnectionBuilder;
 import java.time.LocalDate;
 
 @Table
@@ -65,6 +67,8 @@ public class User {
         this.disabled = false;
         this.locked = false;
     }
+
+
 
     public void dataUpdate(DataUpdateUser dataUpdateUser){
 

@@ -3,9 +3,11 @@ package com.monarca.backendmonarca.controller.user;
 import com.monarca.backendmonarca.domain.user.User;
 import com.monarca.backendmonarca.domain.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,6 +34,7 @@ public class UserSecurityService implements UserDetailsService {
                 .disabled(user.getDisabled())
                 .build();
     }
+
 }
 
 

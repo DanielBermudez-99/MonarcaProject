@@ -12,7 +12,7 @@ function App() {
     
     <NextUIProvider>
       <NavBar/>
-      <Login/> 
+      {/* <Login/>  */}
       <Product/>
     </NextUIProvider>
   );

@@ -71,7 +71,7 @@ export default function App() {
   ];
 
   return (
-    <div className=" flex flex-wrap gap-4  justify-center items-start h-screen">
+    <div className=" flex flex-wrap gap-4  justify-center items-start">
       
       {list.map((item, index) => (
         <Card className="max-w-xs flex justify-center items-center" shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>

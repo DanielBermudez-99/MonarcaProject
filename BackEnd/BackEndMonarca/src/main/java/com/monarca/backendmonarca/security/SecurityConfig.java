@@ -25,8 +25,8 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers(HttpMethod.GET, "/user").hasAnyRole("USER","ADMIN")
                 .requestMatchers(HttpMethod.POST, "/user").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/userId").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/userId").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/user/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/user{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/product").hasAnyRole("USER")
                 .anyRequest()
                 .authenticated()
@@ -35,8 +35,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-
 
 
     @Bean

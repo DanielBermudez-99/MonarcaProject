@@ -4,6 +4,7 @@ import com.monarca.backendmonarca.domain.user.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,11 +18,17 @@ public class UserController {
     @Autowired
     private CrudRepositoryUser crudRepositoryUser;
 
+    //Inyectamos el password encoder para encriptar la contraseña
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping
     public ResponseEntity<User> crearUsuario(@RequestBody DataRegisterUser dataRegisterUser) {
-        User newUser = userRepository.save(new User(dataRegisterUser));
+        User newUser = userRepository.save(new User(dataRegisterUser, passwordEncoder));
         return ResponseEntity.ok(newUser);
     }
+
 
     @GetMapping
     public ResponseEntity<?> obtenerUsuarios(){

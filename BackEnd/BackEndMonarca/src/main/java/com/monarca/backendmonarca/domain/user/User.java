@@ -1,6 +1,8 @@
 package com.monarca.backendmonarca.domain.user;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.ConnectionBuilder;
 import java.time.LocalDate;
@@ -49,11 +51,13 @@ public class User {
     @Column(name = "locked")
     private boolean locked;
 
-    public User ( DataRegisterUser dataRegisterUser){
+    public User (DataRegisterUser dataRegisterUser, PasswordEncoder passwordEncoder){
         this.name = dataRegisterUser.name();
         this.lastname = dataRegisterUser.lastname();
         this.username = dataRegisterUser.username();
-        this.password = dataRegisterUser.password();
+        //Utilizamos el password encoder para encriptar la contraseña
+        this.password = passwordEncoder.encode(dataRegisterUser.password());
+//        this.password = passwordEncoder.encode(dataRegisterUser.password());
         this.email = dataRegisterUser.email();
         this.phone = dataRegisterUser.phone();
         this.location = dataRegisterUser.location();
@@ -67,6 +71,7 @@ public class User {
         this.disabled = false;
         this.locked = false;
     }
+
 
 
 
@@ -123,5 +128,7 @@ public class User {
     public String getRoles() {
         return this.role.name();
     }
+
+
 }
 

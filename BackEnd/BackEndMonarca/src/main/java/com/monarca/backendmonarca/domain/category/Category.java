@@ -16,7 +16,7 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    public Category ( DataRegisterCategory dataRegisterCategory){
+    public Category(DataRegisterCategory dataRegisterCategory) {
 
         this.name = dataRegisterCategory.name();
     }

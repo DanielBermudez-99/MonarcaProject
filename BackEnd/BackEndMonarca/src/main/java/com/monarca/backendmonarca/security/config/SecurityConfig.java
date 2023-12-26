@@ -36,8 +36,16 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .authorizeRequests()
+                .requestMatchers(HttpMethod.POST, "password-reset/**").permitAll()
+                .requestMatchers(HttpMethod.PUT, "password-reset/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "user/register/**").permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/category/create").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/category/list").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/category/update/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/category/delete/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/user").hasAnyRole("USER","ADMIN")
                 .requestMatchers(HttpMethod.POST, "/user").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/user/{id}").hasRole("ADMIN")
@@ -74,10 +82,4 @@ public class SecurityConfig {
             return cors;
         };
     }
-//Sirve para encriptar la contraseña cuando queremos almacenar en variables en memoria
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        //Encriptamos la contraseña
-//        return new BCryptPasswordEncoder();
-//    }
 }

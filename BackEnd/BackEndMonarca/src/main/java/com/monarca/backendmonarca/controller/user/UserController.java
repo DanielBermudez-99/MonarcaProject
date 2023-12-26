@@ -23,20 +23,20 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<User> crearUsuario(@RequestBody DataRegisterUser dataRegisterUser) {
         User newUser = userRepository.save(new User(dataRegisterUser, passwordEncoder));
         return ResponseEntity.ok(newUser);
     }
 
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<?> obtenerUsuarios(){
 
         return ResponseEntity.ok(userRepository.findAll());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     @Transactional
     public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @RequestBody DataUpdateUser dataUpdateUser){
         User user = crudRepositoryUser.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
@@ -44,7 +44,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     @Transactional
     public ResponseEntity<?> eliminarUsuario(@PathVariable Long id){
         crudRepositoryUser.deleteById(id);

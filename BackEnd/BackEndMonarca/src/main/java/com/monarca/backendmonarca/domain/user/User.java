@@ -51,6 +51,7 @@ public class User {
     @Column(name = "locked")
     private boolean locked;
 
+
     public User (DataRegisterUser dataRegisterUser, PasswordEncoder passwordEncoder){
         this.name = dataRegisterUser.name();
         this.lastname = dataRegisterUser.lastname();

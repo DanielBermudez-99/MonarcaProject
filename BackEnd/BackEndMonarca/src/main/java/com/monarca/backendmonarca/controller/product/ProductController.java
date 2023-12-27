@@ -16,25 +16,25 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<Product> crearProducto(@RequestBody DataRegisterProduct dataRegisterProduct) {
         Product newProduct = productRepository.save(new Product(dataRegisterProduct));
         return ResponseEntity.ok(newProduct);
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<?> obtenerProductos(){
         return ResponseEntity.ok(productRepository.findAll());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> actualizarProducto(@PathVariable Long id, @RequestBody DataUpdateProduct dataUpdateProduct){
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         product.dataUpdate(dataUpdateProduct);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> eliminarProducto(@PathVariable Long id){
         productRepository.deleteById(id);
         return ResponseEntity.noContent().build();

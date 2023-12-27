@@ -1,5 +1,6 @@
 package com.monarca.backendmonarca.domain.product;
 
+import com.monarca.backendmonarca.domain.category.Category;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -41,6 +42,10 @@ public class Product {
     private boolean disabled;
     @Column(name = "locked")
     private boolean locked;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     public Product(DataRegisterProduct dataRegisterProduct){
         this.name = dataRegisterProduct.name();

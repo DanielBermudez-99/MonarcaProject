@@ -1,7 +1,13 @@
 package com.monarca.backendmonarca.domain.category;
-import jakarta.persistence.*;
-import lombok.*;
 
+import com.monarca.backendmonarca.domain.product.Product;
+import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
 
 @Table
 @Entity
@@ -16,9 +22,10 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    public Category(DataRegisterCategory dataRegisterCategory) {
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<Product> products;
 
+    public Category(DataRegisterCategory dataRegisterCategory) {
         this.name = dataRegisterCategory.name();
     }
 }
-

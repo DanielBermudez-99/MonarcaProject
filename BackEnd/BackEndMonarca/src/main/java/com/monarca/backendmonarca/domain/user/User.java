@@ -1,4 +1,6 @@
 package com.monarca.backendmonarca.domain.user;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.monarca.backendmonarca.domain.pqr.Pqr;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -6,6 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.ConnectionBuilder;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Entity
@@ -51,6 +55,10 @@ public class User {
     @Column(name = "locked")
     private boolean locked;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private List<Pqr> pqrs = new ArrayList<>();
+
 
     public User (DataRegisterUser dataRegisterUser, PasswordEncoder passwordEncoder){
         this.name = dataRegisterUser.name();
@@ -68,7 +76,7 @@ public class User {
         this.street = dataRegisterUser.street();
         this.number = dataRegisterUser.number();
         this.date_register = LocalDate.now();
-        this.role = Role.USER;
+        this.role = Role.valueOf(dataRegisterUser.role());
         this.disabled = false;
         this.locked = false;
     }
@@ -113,6 +121,9 @@ public class User {
         }
         if (dataUpdateUser.number() != null) {
             this.number = dataUpdateUser.number();
+        }
+        if (dataUpdateUser.role() != null) {
+            this.role = Role.valueOf(dataUpdateUser.role());
         }
 
     }

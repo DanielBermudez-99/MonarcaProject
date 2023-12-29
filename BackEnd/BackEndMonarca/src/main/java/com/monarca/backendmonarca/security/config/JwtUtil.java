@@ -16,7 +16,7 @@ public class JwtUtil {
                 .withSubject(username)
                 .withIssuer("monarca_web")
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(15)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(30)))
                 .sign(ALGORTIHM);
 
     }

@@ -4,7 +4,7 @@ create table product(
   description VARCHAR(200) NOT NULL,
   stock INT NOT NULL,
   price DECIMAL(10,2) NOT NULL,
-  image BLOB NOT NULL,
+  image_url VARCHAR (255) NOT NULL,
   warranty VARCHAR(255) NOT NULL,
   brand VARCHAR(255) NOT NULL,
   size VARCHAR(255) NOT NULL,

@@ -1,5 +1,7 @@
 package com.monarca.backendmonarca.domain.category;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.monarca.backendmonarca.domain.product.Product;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -7,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Table
@@ -22,8 +25,11 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<Product> products;
+    @ManyToMany(mappedBy = "categories")
+    @JsonBackReference
+
+    private List<Product> products = new ArrayList<>();
+
 
     public Category(DataRegisterCategory dataRegisterCategory) {
         this.name = dataRegisterCategory.name();

@@ -1,11 +1,15 @@
 package com.monarca.backendmonarca.domain.product;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.monarca.backendmonarca.domain.category.Category;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Entity
@@ -25,9 +29,8 @@ public class Product {
     private Integer stock;
     @Column (name = "price")
     private Double price;
-    @Column (name = "image")
-    @Lob
-    private  byte[] image;
+    @Column(name = "image_url")
+    private String image_url;
     @Column (name = "warranty")
     private String warranty;
     @Column (name = "brand")
@@ -43,16 +46,21 @@ public class Product {
     @Column(name = "locked")
     private boolean locked;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @ManyToMany
+    @JoinTable(
+            name = "product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    @JsonManagedReference
+    private List<Category> categories = new ArrayList<>();
 
     public Product(DataRegisterProduct dataRegisterProduct){
         this.name = dataRegisterProduct.name();
         this.description = dataRegisterProduct.description();
         this.stock = dataRegisterProduct.stock();
         this.price = dataRegisterProduct.price();
-        this.image = dataRegisterProduct.image();
+        this.image_url = dataRegisterProduct.image_url();
         this.warranty = dataRegisterProduct.warranty();
         this.brand = dataRegisterProduct.brand();
         this.size = dataRegisterProduct.size();
@@ -75,8 +83,8 @@ public class Product {
         if (dataUpdateProduct.price() != null){
             this.price = dataUpdateProduct.price();
         }
-        if (dataUpdateProduct.image() != null){
-            this.image = dataUpdateProduct.image();
+        if (dataUpdateProduct.image_url() != null){
+            this.image_url = dataUpdateProduct.image_url();
         }
         if (dataUpdateProduct.warranty() != null){
             this.warranty = dataUpdateProduct.warranty();

@@ -1,7 +1,9 @@
 package com.monarca.backendmonarca.domain.product;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.monarca.backendmonarca.domain.category.Category;
+import com.monarca.backendmonarca.domain.order.Orders;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -54,6 +56,10 @@ public class Product {
     )
     @JsonManagedReference
     private List<Category> categories = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "products")
+    @JsonBackReference
+    private List<Orders> orders = new ArrayList<>();
 
     public Product(DataRegisterProduct dataRegisterProduct){
         this.name = dataRegisterProduct.name();

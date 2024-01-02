@@ -1,12 +1,11 @@
 package com.monarca.backendmonarca.domain.user;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.monarca.backendmonarca.domain.order.Orders;
 import com.monarca.backendmonarca.domain.pqr.Pqr;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.sql.ConnectionBuilder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +58,8 @@ public class User {
     @JsonBackReference
     private List<Pqr> pqrs = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Orders> orders = new ArrayList<>();
 
     public User (DataRegisterUser dataRegisterUser, PasswordEncoder passwordEncoder){
         this.name = dataRegisterUser.name();

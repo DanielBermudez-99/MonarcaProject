@@ -20,6 +20,7 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+
     @Autowired
     @Lazy
     private CategoryRepository categoryRepository;
@@ -74,5 +75,6 @@ public class ProductController {
 
         return ResponseEntity.ok().build();
     }
+
 
 }

@@ -1,5 +1,8 @@
 package com.monarca.backendmonarca.domain.user;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.monarca.backendmonarca.domain.order.Orders;
 import com.monarca.backendmonarca.domain.pqr.Pqr;
 import jakarta.persistence.*;
@@ -9,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Table
 @Entity
@@ -59,6 +63,7 @@ public class User {
     private List<Pqr> pqrs = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Orders> orders = new ArrayList<>();
 
     public User (DataRegisterUser dataRegisterUser, PasswordEncoder passwordEncoder){

@@ -58,8 +58,9 @@ public class Product {
     private List<Category> categories = new ArrayList<>();
 
     @ManyToMany(mappedBy = "products")
-    @JsonBackReference
+    @JsonManagedReference
     private List<Orders> orders = new ArrayList<>();
+
 
     public Product(DataRegisterProduct dataRegisterProduct){
         this.name = dataRegisterProduct.name();

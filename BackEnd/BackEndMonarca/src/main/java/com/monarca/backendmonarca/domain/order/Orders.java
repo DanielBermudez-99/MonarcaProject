@@ -1,6 +1,9 @@
 package com.monarca.backendmonarca.domain.order;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.monarca.backendmonarca.domain.product.Product;
 import com.monarca.backendmonarca.domain.user.User;
 import jakarta.persistence.*;
@@ -12,6 +15,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Table
 @Entity
@@ -40,15 +44,18 @@ public class Orders {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @ManyToMany
     @JoinTable(
             name = "order_product",
             joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
-    @JsonManagedReference
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    @JsonBackReference
     private List<Product> products = new ArrayList<>();
+
 
     public Orders(DataRegisterOrder dataRegisterOrder) {
         this.date_purchase = dataRegisterOrder.date_purchase();

@@ -1,8 +1,15 @@
 package com.monarca.backendmonarca.controller.orders;
 
+import com.monarca.backendmonarca.domain.category.Category;
+import com.monarca.backendmonarca.domain.order.DataRegisterOrder;
 import com.monarca.backendmonarca.domain.order.Orders;
 import com.monarca.backendmonarca.domain.order.OrderRepository;
+import com.monarca.backendmonarca.domain.product.Product;
+import com.monarca.backendmonarca.domain.product.ProductRepository;
+import com.monarca.backendmonarca.domain.user.User;
+import com.monarca.backendmonarca.domain.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +23,12 @@ public class OrdersController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // Obtener todas las órdenes
 //    @GetMapping("/list")
@@ -39,11 +52,46 @@ public class OrdersController {
         }
     }
 
+
     // Crear una nueva orden
-    @PostMapping ("/register")
-    public Orders createOrder(@RequestBody Orders order) {
-        return orderRepository.save(order);
+    @PostMapping("/create/{userId}")
+    public ResponseEntity<Orders> createOrder(@PathVariable Long userId, @RequestBody DataRegisterOrder dataRegisterOrder) {
+        Optional<User> userOptional = userRepository.findById(String.valueOf(userId));
+        if (!userOptional.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Orders order = new Orders(dataRegisterOrder);
+        order.setUser(userOptional.get());
+        orderRepository.save(order);
+        return ResponseEntity.ok(order);
     }
+    @PostMapping("/addProducts/{orderId}")
+    public ResponseEntity<?> addProductsToOrder(@PathVariable Long orderId, @RequestBody List<Long> productIds) {
+        try {
+            Optional<Orders> orderOptional = orderRepository.findById(orderId);
+            if (!orderOptional.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Orders order = orderOptional.get();
+            for (Long productId : productIds) {
+                Optional<Product> productOptional = productRepository.findById(productId);
+                if (!productOptional.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product not found for id: " + productId);
+                }
+
+                Product product = productOptional.get();
+                order.getProducts().add(product);
+            }
+
+            orderRepository.save(order);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding products to order: " + e.getMessage());
+        }
+    }
+
 
     // Actualizar una orden existente
     @PutMapping("update/{id}")
@@ -70,4 +118,6 @@ public class OrdersController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
 }

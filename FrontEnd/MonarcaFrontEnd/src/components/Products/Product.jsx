@@ -14,7 +14,7 @@ export default function App() {
     },
     {
       title: "Inter Miami",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/6b1faba76baf46e997acaf63000d83a9_9366/camiseta-local-inter-miami-cf-22-23.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/Camiseta%20Inter%20Miami.jpg",
       price: "$10.00",
     },
     {

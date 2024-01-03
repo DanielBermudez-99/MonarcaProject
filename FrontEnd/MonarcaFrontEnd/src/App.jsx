@@ -1,22 +1,23 @@
 import * as React from "react";
-// import User from "./components/Users/User.jsx";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from "./components/Navbar/NavBar.jsx";
 import Product from "./components/Products/Product.jsx";
-// import ResetPassword from "./components/Auth/ResetPassword.jsx";
 import Login from "./components/Auth/Login.jsx";
 import {NextUIProvider} from "@nextui-org/react";
 
-
 function App() {
-
   return (
-    
     <NextUIProvider>
-      <NavBar/>
-      {/* <ResetPassword/> */}
-      {/* <Login/>   */}
-      <Product/> 
+      <Router>
+        <NavBar/>
+        <Routes>
+          <Route path="/login/auth" element={<Login/>} />
+          <Route path="/product/list" element={<Product/>} />
+          {/* Define las demás rutas aquí... */}
+        </Routes>
+      </Router>
     </NextUIProvider>
   );
 }
-export default App
+
+export default App;

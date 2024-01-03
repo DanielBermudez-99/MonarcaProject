@@ -2,6 +2,7 @@ package com.monarca.backendmonarca.controller.auth;
 
 import com.monarca.backendmonarca.infra.services.dto.LoginDto;
 import com.monarca.backendmonarca.security.config.JwtUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
+    @Transactional
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(login);

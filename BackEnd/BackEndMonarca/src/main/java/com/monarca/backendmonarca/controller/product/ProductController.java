@@ -6,11 +6,15 @@ import com.monarca.backendmonarca.domain.category.CategoryRepository;
 import com.monarca.backendmonarca.domain.product.DataUpdateProduct;
 import com.monarca.backendmonarca.domain.product.Product;
 import com.monarca.backendmonarca.domain.product.ProductRepository;
+import com.monarca.backendmonarca.infra.services.AzureStorageService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/product")
@@ -24,6 +28,10 @@ public class ProductController {
     @Autowired
     @Lazy
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private AzureStorageService azureStorageService;
+
 
     @PostMapping("/register")
     public ResponseEntity<Product> crearProducto(@RequestBody DataRegisterProduct dataRegisterProduct) {
@@ -74,6 +82,25 @@ public class ProductController {
         productRepository.save(product);
 
         return ResponseEntity.ok().build();
+    }
+
+
+    @PostMapping("/uploadImage/{productId}")
+    public ResponseEntity<String> uploadImage(@PathVariable Long productId, @RequestParam("file") MultipartFile file) throws IOException {
+        // Subir la imagen a Azure y obtener la URL
+        String url = azureStorageService.upload(file);
+
+        // Buscar el producto en la base de datos
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        // Actualizar el campo image_url con la URL de la imagen
+        product.setImage_url(url);
+
+        // Guardar el producto actualizado en la base de datos
+        productRepository.save(product);
+
+        return ResponseEntity.ok(url);
     }
 
 

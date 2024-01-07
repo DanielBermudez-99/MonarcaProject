@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -11,11 +11,22 @@ import {
   Button
 } from "@nextui-org/react";
 
-import { MonarcaLogo } from "./MonarcaLogo";
-import { SubLogo } from "./Sublogo";
-
 export default function App() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('jwt');
+    setIsAuthenticated(false);
+    window.location.href = '/login/auth';
+  };
 
   const menuItems = [
     "Profile",
@@ -31,41 +42,30 @@ export default function App() {
   ];
 
   return (
-    <div>
-      <style>
-        {`
-          @media screen and (max-width: 625px) {
-            .md\\:flex {
-              display: none !important;
-            }
-          }
-        `}
-      </style>
+    <Navbar onMenuOpenChange={setIsMenuOpen}>
+      <NavbarContent>
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          className="md:hidden"
+        />
+        <NavbarBrand>
+          <p className="font-text text-inherit">MONARCA INC</p>
+        </NavbarBrand>
+      </NavbarContent>
 
-      <Navbar className="" onMenuOpenChange={setIsMenuOpen}>
-        <NavbarContent>
-          <NavbarMenuToggle
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            className="md:hidden"
-          />
-          <NavbarBrand>
-            <p className="font-text text-inherit">MONARCA INC</p>
-          </NavbarBrand>
-        </NavbarContent>
-
-        <NavbarContent className="md:flex md:gap-4" justify="center">
-          <NavbarItem>
-            <Link color="foreground" href="#">
-              HOMBRE
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link color="foreground" href="#" aria-current="page">
-              MUJER
-            </Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-          <Link  href="#">
+      <NavbarContent className="md:flex  md:gap-4" justify="center">
+        <NavbarItem>
+          <Link color="foreground" href="#">
+            HOMBRE
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="#" aria-current="page">
+            MUJER
+          </Link>
+        </NavbarItem>
+        <NavbarItem isActive>
+          <Link href="#">
             OFERTAS
           </Link>
         </NavbarItem>
@@ -79,40 +79,44 @@ export default function App() {
             INVIERNO
           </Link>
         </NavbarItem>
-        </NavbarContent>
+      </NavbarContent>
 
-        <NavbarContent justify="end" className="md:justify-end">
-          <NavbarItem className="hidden lg:flex">
-            <Link href="#">Login</Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Button as={Link} color="primary" href="#" variant="flat">
-              Registrarse
-            </Button>
-          </NavbarItem>
-        </NavbarContent>
+      <NavbarContent justify="end" className="md:justify-end">
+        {!isAuthenticated && (
+          <>
+            <NavbarItem className="hidden lg:flex">
+              <Link href="">Login</Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Button as={Link} color="primary" href="http://localhost:5173/login/auth#" variant="flat">
+                Registrarse
+              </Button>
+            </NavbarItem>
+          </>
+        )}
+      </NavbarContent>
 
-        <NavbarMenu>
-          {menuItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
-              <Link
-                color={
-                  index === 2
-                    ? "primary"
-                    : index === menuItems.length - 1
-                    ? "danger"
-                    : "foreground"
-                }
-                className="w-full"
-                href="#"
-                size="lg"
-              >
-                {item}
-              </Link>
-            </NavbarMenuItem>
-          ))}
-        </NavbarMenu>
-      </Navbar>
-    </div>
+      <NavbarMenu>
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item}-${index}`}>
+            <Link
+              color={
+                index === 2
+                  ? "primary"
+                  : index === menuItems.length - 1
+                  ? "danger"
+                  : "foreground"
+              }
+              className="w-full"
+              href="#"
+              size="lg"
+              onClick={item === "Log Out" ? handleLogout : null}
+            >
+              {item}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
+    </Navbar>
   );
 }

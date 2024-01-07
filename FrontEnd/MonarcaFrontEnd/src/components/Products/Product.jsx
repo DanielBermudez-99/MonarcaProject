@@ -9,7 +9,7 @@ export default function App() {
   const list = [
     {
       title: "Sudadera",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/e2ae95b94cb442edab573139e9c87c59_9366/flared-tp.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/flared-tp.jpg",
       price: "$5.50",
     },
     {
@@ -19,54 +19,55 @@ export default function App() {
     },
     {
       title: "Xforce White",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/7a4837fc5c5549368b13c751bdae3ee6_9366/tenis-nmd_r1.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/tenis-nmd_r1.jpg",
       price: "$5.30",
     },
     {
       title: "Avocado Running",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/75c3e70cdace4495a74ab4840783963a_9366/tenis-adizero-sl.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/tenis-adizero-sl.jpg",
       price: "$15.70",
     },
     {
       title: "Sudadera",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/e2ae95b94cb442edab573139e9c87c59_9366/flared-tp.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/flared-tp.jpg",
       price: "$5.50",
     },
     {
       title: "Inter Miami",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/6b1faba76baf46e997acaf63000d83a9_9366/camiseta-local-inter-miami-cf-22-23.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/Camiseta%20Inter%20Miami.jpg",
       price: "$10.00",
     },
     {
       title: "Xforce White",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/7a4837fc5c5549368b13c751bdae3ee6_9366/tenis-nmd_r1.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/tenis-nmd_r1.jpg",
       price: "$5.30",
     },
     {
       title: "Avocado Running",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/75c3e70cdace4495a74ab4840783963a_9366/tenis-adizero-sl.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/tenis-adizero-sl.jpg",
       price: "$15.70",
     },
     {
       title: "Sudadera",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/e2ae95b94cb442edab573139e9c87c59_9366/flared-tp.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/flared-tp.jpg",
       price: "$5.50",
     },
     {
       title: "Inter Miami",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/6b1faba76baf46e997acaf63000d83a9_9366/camiseta-local-inter-miami-cf-22-23.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/Camiseta%20Inter%20Miami.jpg",
       price: "$10.00",
     },
     {
       title: "Sudadera",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/e2ae95b94cb442edab573139e9c87c59_9366/flared-tp.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/flared-tp.jpg",
       price: "$5.50",
     },
     {
       title: "Avocado Running",
-      img: "https://assets.adidas.com/images/w_280,h_280,f_auto,q_auto:sensitive/75c3e70cdace4495a74ab4840783963a_9366/tenis-adizero-sl.jpg",
+      img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/tenis-adizero-sl.jpg",
       price: "$15.70",
     },
+    
 
   ];
 

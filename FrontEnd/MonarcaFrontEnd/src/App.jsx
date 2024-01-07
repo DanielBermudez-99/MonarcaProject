@@ -5,6 +5,8 @@ import Product from "./components/Products/Product.jsx";
 import Login from "./components/Auth/Login.jsx";
 import {NextUIProvider} from "@nextui-org/react";
 
+
+
 function App() {
   return (
     <NextUIProvider>

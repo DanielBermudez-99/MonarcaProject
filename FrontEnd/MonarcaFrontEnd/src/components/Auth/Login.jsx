@@ -21,7 +21,7 @@ export default function App() {
 
   //Validación nombre
   const [value1, setValue1] = React.useState("");
-  
+
   //Validación Autenticación
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -34,6 +34,8 @@ export default function App() {
     try {
       const response = await axios.post('http://localhost:8080/auth/login', userCredentials);
       if (response.status === 200) {
+        const token = response.data.jwt;
+        localStorage.setItem('jwt', token);
         window.location.href = 'http://localhost:5173/product/list';
       } else {
         // manejar error de inicio de sesión
@@ -46,7 +48,7 @@ export default function App() {
   };
 
   return (
-    <div className=" flex justify-center items-center h-screen">
+    <div className=" flex justify-center items-center h-screen ">
       <Card className="max-w-lg w-full ">
         <CardHeader className="pb-0 pt-2 px-4 flex-col items-center">
           <h6 className="font-Roboto Condensed">MONARCA INC</h6>

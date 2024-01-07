@@ -25,7 +25,7 @@ export default function App() {
   const handleLogout = () => {
     localStorage.removeItem('jwt');
     setIsAuthenticated(false);
-    window.location.href = '/login/auth';
+    window.location.href = '/auth/login';
   };
 
   const menuItems = [
@@ -88,7 +88,7 @@ export default function App() {
               <Link href="">Login</Link>
             </NavbarItem>
             <NavbarItem>
-              <Button as={Link} color="primary" href="http://localhost:5173/login/auth#" variant="flat">
+              <Button as={Link} color="primary" href="http://localhost:5173/auth/login" variant="flat">
                 Registrarse
               </Button>
             </NavbarItem>

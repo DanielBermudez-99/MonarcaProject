@@ -2,7 +2,7 @@ import React from "react";
 import {Tabs, Tab, Input, Link, Button, Card, CardBody, CardHeader} from "@nextui-org/react";
 import { EyeFilledIcon } from "./EyeFilledIcon";
 import { EyeSlashFilledIcon } from "./EyeSlashFilledIcon";
-import axios from "axios";
+import api from './api.js'; // Importa la instancia de axios con el interceptor
 
 export default function App() {
   const [selected, setSelected] = React.useState("login");
@@ -32,10 +32,11 @@ export default function App() {
     };
 
     try {
-      const response = await axios.post('http://localhost:8080/auth/login', userCredentials);
+      const response = await api.post('/auth/login', userCredentials); // usa 'api' en lugar de 'axios'
       if (response.status === 200) {
-        const token = response.data.jwt;
-        localStorage.setItem('jwt', token);
+        const token = response.data.jwt; // obtén el token del cuerpo de la respuesta
+        console.log('Token:', token);
+        localStorage.setItem('jwt', token); // guarda el token en el almacenamiento local
         window.location.href = 'http://localhost:5173/product/list';
       } else {
         // manejar error de inicio de sesión
@@ -45,11 +46,11 @@ export default function App() {
       console.error('Error al iniciar sesión:', error);
       // manejar error de red
     }
-  };
+}
 
   return (
     <div className=" flex justify-center items-center h-screen ">
-      <Card className="max-w-lg w-full ">
+      <Card className="max-w-lg w-full " >
         <CardHeader className="pb-0 pt-2 px-4 flex-col items-center">
           <h6 className="font-Roboto Condensed">MONARCA INC</h6>
         </CardHeader>

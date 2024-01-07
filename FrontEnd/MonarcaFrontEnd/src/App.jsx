@@ -13,7 +13,7 @@ function App() {
       <Router>
         <NavBar/>
         <Routes>
-          <Route path="/login/auth" element={<Login/>} />
+          <Route path="/auth/login" element={<Login/>} />
           <Route path="/product/list" element={<Product/>} />
           {/* Define las demás rutas aquí... */}
         </Routes>

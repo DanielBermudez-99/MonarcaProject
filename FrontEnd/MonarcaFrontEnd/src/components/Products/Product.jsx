@@ -67,8 +67,6 @@ export default function App() {
       img: "https://monarcaweb.blob.core.windows.net/imagenesmonarca/tenis-adizero-sl.jpg",
       price: "$15.70",
     },
-    
-
   ];
 
   return (

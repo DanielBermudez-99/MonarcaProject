@@ -3,19 +3,23 @@ import {Card, CardBody, CardFooter, Image, Chip} from "@nextui-org/react";
 import {Button} from "@nextui-org/react";
 import {Textarea} from "@nextui-org/react";
 import api from '../Auth/api.js'; // Importa la instancia de axios con el interceptor
+import { useParams } from 'react-router-dom'; // Importa el hook useParams
 
-export default function App() {
+export default function Category() {
   const [products, setProducts] = useState([]); // Crea un estado para almacenar los productos
+  const { categoryId } = useParams(); // Obtiene el parámetro de ruta categoryId
 
   useEffect(() => {
-    api.get('/product/list') // Hace una solicitud GET a la API de productos
+    api.get(`/product/list/category/${categoryId}`) // Hace una solicitud GET a la API de productos por categoría
         .then(response => {
           setProducts(response.data); // Actualiza el estado con los datos de la respuesta
         })
         .catch(error => {
           console.error('Error al obtener los productos:', error);
         });
-  }, []); // El array vacío significa que useEffect se ejecutará solo una vez, cuando el componente se monte
+  }, [categoryId]); // El array vacío significa que useEffect se ejecutará solo una vez, cuando el componente se monte
+
+  // Resto del código...
 
   return (
       <div className=" flex flex-wrap gap-4  justify-center items-start">

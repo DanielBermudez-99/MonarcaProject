@@ -39,6 +39,6 @@ public class AuthController {
 
         String jwt = this.jwtUtil.create(loginDto.getUsername());
 
-        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 }

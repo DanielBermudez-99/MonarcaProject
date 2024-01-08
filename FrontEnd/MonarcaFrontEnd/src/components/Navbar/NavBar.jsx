@@ -10,16 +10,28 @@ import {
   Link,
   Button
 } from "@nextui-org/react";
+import { useNavigate } from 'react-router-dom';
+import api from '../Auth/api.js'; // Importa la instancia de axios con el interceptor
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [categories, setCategories] = useState([]); // Crea un estado para almacenar las categorías
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
     if (token) {
       setIsAuthenticated(true);
     }
+
+    api.get('/category/list') // Hace una solicitud GET a la API de categorías
+        .then(response => {
+          setCategories(response.data); // Actualiza el estado con los datos de la respuesta
+        })
+        .catch(error => {
+          console.error('Error al obtener las categorías:', error);
+        });
   }, []);
 
   const handleLogout = () => {
@@ -29,15 +41,9 @@ export default function App() {
   };
 
   const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
+    "Producto",
+    "Categoria",
+    "Pqr",
     "Log Out",
   ];
 
@@ -54,31 +60,13 @@ export default function App() {
       </NavbarContent>
 
       <NavbarContent className="md:flex  md:gap-4" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            HOMBRE
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#" aria-current="page">
-            MUJER
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#">
-            OFERTAS
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#" aria-current="page">
-            VERANO
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#" aria-current="page">
-            INVIERNO
-          </Link>
-        </NavbarItem>
+        {categories.map((category, index) => (
+          <NavbarItem key={index}>
+            <Link color="foreground"  href="#" onClick={() => navigate(`/category/${category.id}`)}>
+              {category.name}
+            </Link>
+          </NavbarItem>
+        ))}
       </NavbarContent>
 
       <NavbarContent justify="end" className="md:justify-end">

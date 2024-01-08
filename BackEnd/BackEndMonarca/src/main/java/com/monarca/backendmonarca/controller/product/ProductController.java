@@ -103,5 +103,11 @@ public class ProductController {
         return ResponseEntity.ok(url);
     }
 
+    @GetMapping("/list/category/{categoryId}")
+    public ResponseEntity<?> obtenerProductosPorCategoria(@PathVariable Long categoryId){
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        return ResponseEntity.ok(category.getProducts());
+    }
 
 }

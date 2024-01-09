@@ -4,6 +4,7 @@ import {Button} from "@nextui-org/react";
 import {Textarea} from "@nextui-org/react";
 import api from '../Auth/api.js'; // Importa la instancia de axios con el interceptor
 import { useParams } from 'react-router-dom'; // Importa el hook useParams
+import { CartLogo } from "../Navbar/CartLogo.jsx";
 
 export default function Category() {
   const [products, setProducts] = useState([]); // Crea un estado para almacenar los productos
@@ -43,6 +44,9 @@ export default function Category() {
                 <div className="flex justify-center items-center gap-4">
                   <b>{product.name}</b>
                   <Chip color="primary" >{product.size}</Chip>
+                  <Button isIconOnly  color="foreground"  aria-label="Add">
+                    <CartLogo/>
+                  </Button>
                 </div>
                 <Textarea
                     isDisabled
@@ -53,7 +57,7 @@ export default function Category() {
                 />
               </CardFooter>
               <div className="flex justify-center items-center gap-4">
-                <p className="text-default-500">${product.price}</p>
+                <p className="text-default-foreground">${product.price}</p>
                 <Button color="primary" >
                   COMPRAR
                 </Button>

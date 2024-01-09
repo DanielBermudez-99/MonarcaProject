@@ -1,7 +1,10 @@
 package com.monarca.backendmonarca.domain.product;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.monarca.backendmonarca.domain.cart.CartItem;
 import com.monarca.backendmonarca.domain.category.Category;
 import com.monarca.backendmonarca.domain.order.Orders;
 import jakarta.persistence.*;
@@ -60,6 +63,10 @@ public class Product {
     @ManyToMany(mappedBy = "products")
     @JsonManagedReference
     private List<Orders> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<CartItem> cartItems = new ArrayList<>();
 
 
     public Product(DataRegisterProduct dataRegisterProduct){

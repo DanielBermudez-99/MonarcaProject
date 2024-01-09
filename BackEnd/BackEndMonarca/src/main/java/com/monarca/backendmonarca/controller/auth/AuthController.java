@@ -1,5 +1,7 @@
 package com.monarca.backendmonarca.controller.auth;
 
+import com.monarca.backendmonarca.domain.user.User;
+import com.monarca.backendmonarca.domain.user.UserRepository;
 import com.monarca.backendmonarca.infra.services.dto.LoginDto;
 import com.monarca.backendmonarca.security.config.JwtUtil;
 import jakarta.transaction.Transactional;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
+    @Autowired
+    private UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
@@ -28,16 +32,22 @@ public class AuthController {
     }
 
 
+    // En AuthController.java
+
     @PostMapping("/login")
     @Transactional
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(login);
 
-        System.out.println(authentication.isAuthenticated());
-        System.out.println(authentication.getPrincipal());
+        // Busca al usuario en la base de datos
+        User user = userRepository.findByUsername(loginDto.getUsername());
 
-        String jwt = this.jwtUtil.create(loginDto.getUsername());
+        // Obtiene el id del usuario
+        Long userId = user.getId();
+
+        // Pasa el nombre de usuario y el id del usuario al método create
+        String jwt = this.jwtUtil.create(loginDto.getUsername(), userId.toString());
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }

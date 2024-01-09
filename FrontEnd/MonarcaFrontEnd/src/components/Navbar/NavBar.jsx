@@ -10,6 +10,7 @@ import {
   Link,
   Button
 } from "@nextui-org/react";
+import { CartLogo } from "./CartLogo.jsx";
 import { useNavigate } from 'react-router-dom';
 import api from '../Auth/api.js'; // Importa la instancia de axios con el interceptor
 
@@ -18,6 +19,7 @@ export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [categories, setCategories] = useState([]); // Crea un estado para almacenar las categorías
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
@@ -48,14 +50,14 @@ export default function App() {
   ];
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen}>
+    <Navbar shouldHideOnScroll onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="md:hidden"
         />
         <NavbarBrand>
-          <p className="font-text text-inherit">MONARCA INC</p>
+          <Link href="http://localhost:5173/product/list" className="font-text text-inherit">MONARCA INC</Link>
         </NavbarBrand>
       </NavbarContent>
 
@@ -69,10 +71,10 @@ export default function App() {
         ))}
       </NavbarContent>
 
-      <NavbarContent justify="end" className="md:justify-end">
+      <NavbarContent  justify="end" className="md:justify-end">
         {!isAuthenticated && (
           <>
-            <NavbarItem className="hidden lg:flex">
+            <NavbarItem  className="hidden lg:flex">
               <Link href="">Login</Link>
             </NavbarItem>
             <NavbarItem>
@@ -82,6 +84,13 @@ export default function App() {
             </NavbarItem>
           </>
         )}
+      {isAuthenticated && (
+      <div className="flex gap-4 items-center">
+        <Button isIconOnly  color="foreground" as={Link} href="http://localhost:5173/cart" aria-label="Add">
+          <CartLogo />
+        </Button>
+        </div>
+      )}
       </NavbarContent>
 
       <NavbarMenu>

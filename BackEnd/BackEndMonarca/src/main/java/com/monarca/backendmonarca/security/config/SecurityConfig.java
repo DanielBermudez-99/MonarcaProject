@@ -56,6 +56,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/product/update/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/product/delete/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/product/uploadImage").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/product/{productId}").hasAnyRole("ADMIN","USER")
                 .requestMatchers(HttpMethod.POST, "/register/product/{productId}/categories/{categoryId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/delete/product/{productId}/categories/{categoryId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/pqr/list").hasRole("ADMIN")
@@ -74,6 +75,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE,"/cart/{userId}/remove/{productId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/cart/{userId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/cart/{userId}/total").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"/cart/{userId}/update/{productId}").hasRole("ADMIN")
 
                 .anyRequest()
                 .authenticated()

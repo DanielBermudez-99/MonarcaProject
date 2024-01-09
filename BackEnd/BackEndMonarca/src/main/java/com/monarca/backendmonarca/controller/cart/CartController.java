@@ -11,7 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -68,9 +71,30 @@ public class CartController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<CartItem>> getCart(@PathVariable Long userId) {
+    public ResponseEntity<List<Map<String, Object>>> getCart(@PathVariable Long userId) {
         List<CartItem> cartItems = cartItemRepository.findByUserId(userId);
-        return ResponseEntity.ok(cartItems);
+
+        List<Map<String, Object>> cartInfo = new ArrayList<>();
+
+        for (CartItem cartItem : cartItems) {
+            Long productId = cartItem.getProduct().getId();
+
+            // Obtén la información del producto directamente desde el repositorio de productos
+            Optional<Product> productOptional = productRepository.findById(productId);
+            if (productOptional.isPresent()) {
+                Product product = productOptional.get();
+
+                // Agrega la información del producto al resultado
+                Map<String, Object> cartItemInfo = new HashMap<>();
+                cartItemInfo.put("productInfo", product);
+                cartItemInfo.put("quantity", cartItem.getQuantity());
+                // Puedes agregar más campos según sea necesario
+
+                cartInfo.add(cartItemInfo);
+            }
+        }
+
+        return ResponseEntity.ok(cartInfo);
     }
 
     @GetMapping("/{userId}/total")
@@ -83,5 +107,18 @@ public class CartController {
         }
 
         return ResponseEntity.ok(total);
+    }
+
+    @PutMapping("/{userId}/update/{productId}")
+    public ResponseEntity<CartItem> updateQuantityInCart(@PathVariable Long userId, @PathVariable Long productId, @RequestBody QuantityRequest quantityRequest) {
+        Optional<CartItem> cartItem = cartItemRepository.findByUserIdAndProductId(userId, productId);
+        if (cartItem.isPresent()) {
+            CartItem existingCartItem = cartItem.get();
+            existingCartItem.setQuantity(quantityRequest.getQuantity());
+            cartItemRepository.save(existingCartItem);
+            return ResponseEntity.ok(existingCartItem);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

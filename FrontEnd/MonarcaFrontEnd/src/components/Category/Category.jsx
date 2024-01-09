@@ -5,10 +5,21 @@ import {Textarea} from "@nextui-org/react";
 import api from '../Auth/api.js'; // Importa la instancia de axios con el interceptor
 import { useParams } from 'react-router-dom'; // Importa el hook useParams
 import { CartLogo } from "../Navbar/CartLogo.jsx";
+import { jwtDecode } from 'jwt-decode';
 
 export default function Category() {
   const [products, setProducts] = useState([]); // Crea un estado para almacenar los productos
   const { categoryId } = useParams(); // Obtiene el parámetro de ruta categoryId
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      const decodedJwt = jwtDecode(token);
+      const userId = parseInt(decodedJwt.userId, 10);
+      setUserId(userId);
+    }
+  }, []);
 
   useEffect(() => {
     api.get(`/product/list/category/${categoryId}`) // Hace una solicitud GET a la API de productos por categoría
@@ -20,7 +31,16 @@ export default function Category() {
         });
   }, [categoryId]); // El array vacío significa que useEffect se ejecutará solo una vez, cuando el componente se monte
 
-  // Resto del código...
+  const handleAddToCart = (productId) => {
+    api.post(`/cart/${userId}/add/${productId}`, { quantity: 1 })
+      .then(response => {
+        window.alert('Producto agregado al carrito');
+        console.log('Producto agregado al carrito:', response.data);
+      })
+      .catch(error => {
+        console.error('Error al agregar el producto al carrito:', error);
+      });
+  };
 
   return (
       <div className=" flex flex-wrap gap-4  justify-center items-start">
@@ -44,7 +64,7 @@ export default function Category() {
                 <div className="flex justify-center items-center gap-4">
                   <b>{product.name}</b>
                   <Chip color="primary" >{product.size}</Chip>
-                  <Button isIconOnly  color="foreground"  aria-label="Add">
+                  <Button isIconOnly  color="foreground"  aria-label="Add" onClick={() => handleAddToCart(product.id)}>
                     <CartLogo/>
                   </Button>
                 </div>

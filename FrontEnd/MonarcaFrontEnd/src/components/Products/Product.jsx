@@ -50,6 +50,7 @@ export default function App() {
 
   api.post(`/cart/${userId}/add/${productId}`, { quantity: 1 })  // Envía la cantidad directamente como parámetro en la URL
     .then(response => {
+      window.alert('Producto agregado al carrito');
       console.log('Producto agregado al carrito:', response.data);
     })
     .catch(error => {

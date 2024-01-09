@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
@@ -108,6 +110,21 @@ public class ProductController {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
         return ResponseEntity.ok(category.getProducts());
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<?> obtenerProducto(@PathVariable Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        // Devuelve solo la información necesaria para el carrito
+        Map<String, Object> productInfo = new HashMap<>();
+        productInfo.put("name", product.getName());
+        productInfo.put("size", product.getSize());
+        productInfo.put("description", product.getDescription());
+        productInfo.put("price", product.getPrice());
+
+        return ResponseEntity.ok(productInfo);
     }
 
 }

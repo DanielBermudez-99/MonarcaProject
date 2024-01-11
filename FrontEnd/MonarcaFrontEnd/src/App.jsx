@@ -17,8 +17,7 @@ function App() {
           <Route path="/auth/login" element={<Login/>} />
           <Route path="/product/list" element={<Product/>} />
           <Route path="/category/:categoryId" element={<Category/>} /> 
-          <Route path="/cart" element={<Cart/>} />
-          
+          <Route path="/cart" element={<Cart/>}/>
         </Routes>
       </Router>
     </NextUIProvider>

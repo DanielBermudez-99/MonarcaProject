@@ -67,11 +67,9 @@ export default function Category() {
 };
 
   return (
-      <div className=" flex flex-wrap gap-4  justify-center items-start">
-
+      <div className=" flex flex-wrap gap-4  justify-center items-center">
         {products.map((product, index) => (
             <Card className="max-w-xs flex justify-center items-center" shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
-
               <CardBody className="overflow-visible p-0 w-13">
                 <Image
                     shadow="sm"

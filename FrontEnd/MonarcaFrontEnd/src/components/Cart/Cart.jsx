@@ -56,8 +56,8 @@ export default function Cart() {
   };
 
   return (
-    <div className="h-screen flex flex-col gap-4">
-      <div className="flex flex-wrap gap-4 justify-center items-start">
+    <div className="flex">
+      <div className="flex flex-wrap gap-4 justify-center items-start cart-container">
         {cartItems.map((cartItem, index) => (
           <Card key={index} className="max-w-xs flex justify-center items-center" shadow="sm" isPressable onPress={() => console.log("item pressed")}>
             <CardBody className="overflow-visible p-0 w-13">
@@ -113,8 +113,8 @@ export default function Cart() {
           </Card>
         ))}
       </div>
-      <div className="flex flex-col items-center">
-      <Card className="max-w-xl w-full">
+      <div className="flex h-screen flex-col w-full">
+      <Card className="max-w-xl w-full fixed">
         <CardBody>
           <div className="mt-4">
             <b className="text-lg font-bold">Resumen de la orden</b>

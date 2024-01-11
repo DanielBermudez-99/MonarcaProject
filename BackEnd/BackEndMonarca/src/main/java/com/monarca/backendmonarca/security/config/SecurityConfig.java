@@ -76,7 +76,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/cart/{userId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/cart/{userId}/total").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT,"/cart/{userId}/update/{productId}").hasRole("ADMIN")
-
+                .requestMatchers(HttpMethod.POST,"/orders/addProducts/{orderId}").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

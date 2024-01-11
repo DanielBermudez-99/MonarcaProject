@@ -3,6 +3,7 @@ import { Card, CardBody, CardFooter, CardHeader, Image, Button } from "@nextui-o
 import { Textarea, Chip } from "@nextui-org/react";
 import api from '../Auth/api.js';
 import { jwtDecode } from 'jwt-decode';
+import { useHref } from "react-router-dom";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -53,6 +54,10 @@ export default function Cart() {
       .catch(error => {
         console.error('Error al actualizar la cantidad del producto en el carrito:', error);
       });
+  };
+
+  const handleContinue = () => {
+    history.push('/order'); // Redirect to /order
   };
 
   return (
@@ -133,7 +138,7 @@ export default function Cart() {
           <br />
           <div className="flex justify-center items-center gap-4">
             <Button color="primary">
-              PAGAR
+              CONTINUAR
             </Button>
           </div>
         </CardBody>

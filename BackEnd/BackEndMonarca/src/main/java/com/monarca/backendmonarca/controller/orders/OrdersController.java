@@ -1,5 +1,7 @@
 package com.monarca.backendmonarca.controller.orders;
 
+import com.monarca.backendmonarca.domain.cart.CartItem;
+import com.monarca.backendmonarca.domain.cart.CartItemRepository;
 import com.monarca.backendmonarca.domain.category.Category;
 import com.monarca.backendmonarca.domain.order.DataRegisterOrder;
 import com.monarca.backendmonarca.domain.order.Orders;
@@ -23,6 +25,9 @@ public class OrdersController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private CartItemRepository cartItemRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -67,7 +72,7 @@ public class OrdersController {
         return ResponseEntity.ok(order);
     }
     @PostMapping("/addProducts/{orderId}")
-    public ResponseEntity<?> addProductsToOrder(@PathVariable Long orderId, @RequestBody List<Long> productIds) {
+    public ResponseEntity<?> addProductsToOrder(@PathVariable Long orderId, @RequestBody List<Long> cartItemIds) {
         try {
             Optional<Orders> orderOptional = orderRepository.findById(orderId);
             if (!orderOptional.isPresent()) {
@@ -75,17 +80,18 @@ public class OrdersController {
             }
 
             Orders order = orderOptional.get();
-            for (Long productId : productIds) {
-                Optional<Product> productOptional = productRepository.findById(productId);
-                if (!productOptional.isPresent()) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product not found for id: " + productId);
+            for (Long cartItemId : cartItemIds) {
+                Optional<CartItem> cartItemOptional = cartItemRepository.findById(cartItemId);
+                if (!cartItemOptional.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CartItem not found for id: " + cartItemId);
                 }
 
-                Product product = productOptional.get();
-                order.getProducts().add(product);
+                CartItem cartItem = cartItemOptional.get();
+                Product product = cartItem.getProduct();
+                product.getOrders().add(order); // Agrega la orden a la lista de órdenes del producto
+                productRepository.save(product); // Guarda el producto con la nueva orden
             }
 
-            orderRepository.save(order);
             return ResponseEntity.ok(order);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding products to order: " + e.getMessage());

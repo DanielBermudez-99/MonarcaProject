@@ -10,6 +10,7 @@ import com.monarca.backendmonarca.domain.product.Product;
 import com.monarca.backendmonarca.domain.product.ProductRepository;
 import com.monarca.backendmonarca.domain.user.User;
 import com.monarca.backendmonarca.domain.user.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,8 +72,10 @@ public class OrdersController {
         orderRepository.save(order);
         return ResponseEntity.ok(order);
     }
+
     @PostMapping("/addProducts/{orderId}")
-    public ResponseEntity<?> addProductsToOrder(@PathVariable Long orderId, @RequestBody List<Long> cartItemIds) {
+    @Transactional
+    public ResponseEntity<?> addProductsToOrder(@PathVariable Long orderId, @RequestBody List<Long> productIds) {
         try {
             Optional<Orders> orderOptional = orderRepository.findById(orderId);
             if (!orderOptional.isPresent()) {
@@ -80,14 +83,13 @@ public class OrdersController {
             }
 
             Orders order = orderOptional.get();
-            for (Long cartItemId : cartItemIds) {
-                Optional<CartItem> cartItemOptional = cartItemRepository.findById(cartItemId);
-                if (!cartItemOptional.isPresent()) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CartItem not found for id: " + cartItemId);
+            for (Long productId : productIds) {
+                Optional<Product> productOptional = productRepository.findById(productId);
+                if (!productOptional.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product not found for id: " + productId);
                 }
 
-                CartItem cartItem = cartItemOptional.get();
-                Product product = cartItem.getProduct();
+                Product product = productOptional.get();
                 product.getOrders().add(order); // Agrega la orden a la lista de órdenes del producto
                 productRepository.save(product); // Guarda el producto con la nueva orden
             }

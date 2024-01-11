@@ -41,26 +41,46 @@ export default function App() {
 
 
   // Función para manejar el clic en el botón del carrito
- const handleAddToCart = (productId) => {
-  const token = localStorage.getItem('jwt');
-  if (!token) {
-    console.error('No token found');
-    return;
-  }
+ const handleAddToCart = async (productId) => {
+  try {
+    const token = localStorage.getItem('jwt');
 
-  api.post(`/cart/${userId}/add/${productId}`, { quantity: 1 })  // Envía la cantidad directamente como parámetro en la URL
-    .then(response => {
+    // Verificar si hay un token
+    if (!token) {
+      console.error('No se encontró ningún token. Usuario no autenticado.');
+      return;
+    }
+
+    // Obtener el carrito del usuario
+    const cartResponse = await api.get(`/cart/${userId}`);
+    const productInCart = cartResponse.data.find(item => item.productId === productId);
+
+    // Verificar si el producto ya está en el carrito
+    if (productInCart) {
+      // Producto ya en el carrito, mostrar alerta al usuario
+      window.alert('El producto ya está en el carrito. No puedes agregar más de este producto.');
+    } else {
+      // Agregar el producto al carrito
+      const response = await api.post(`/cart/${userId}/add/${productId}`, { quantity: 1 });
+
+      // Manejar la respuesta exitosa
       window.alert('Producto agregado al carrito');
       console.log('Producto agregado al carrito:', response.data);
-    })
-    .catch(error => {
-      console.error('Error al agregar el producto al carrito:', error);
-    });
+    }
+  } catch (error) {
+    // Manejar errores en la obtención del carrito o al agregar el producto
+    console.error('Error al procesar la solicitud:', error);
+
+    // Puedes mostrar un mensaje de error al usuario o investigar más el error
+    window.alert('Error al procesar la solicitud. Por favor, inténtalo de nuevo.');
+  }
 };
 
 
+
+
   return (
-    <div className="flex flex-wrap gap-4 justify-center items-start">
+    <div className="flex flex-wrap gap-4 justify-center">
       {products.map((product, index) => (
         <Card className="max-w-xs flex justify-center items-center" shadow="sm" key={index} isPressable onPress={() => console.log("item pressed")}>
           <CardBody className="overflow-visible p-0 w-13">

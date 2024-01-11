@@ -88,6 +88,8 @@ public class CartController {
                 Map<String, Object> cartItemInfo = new HashMap<>();
                 cartItemInfo.put("productInfo", product);
                 cartItemInfo.put("quantity", cartItem.getQuantity());
+                cartItemInfo.put("total", cartItem.getTotal());
+                cartItemInfo.put("productId", productId);
                 // Puedes agregar más campos según sea necesario
 
                 cartInfo.add(cartItemInfo);

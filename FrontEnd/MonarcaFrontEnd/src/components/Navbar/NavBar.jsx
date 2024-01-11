@@ -13,6 +13,7 @@ import {
 import { CartLogo } from "./CartLogo.jsx";
 import { useNavigate } from 'react-router-dom';
 import api from '../Auth/api.js'; // Importa la instancia de axios con el interceptor
+import { MonarcaLogo } from "./MonarcaLogo.jsx";
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,13 +58,13 @@ export default function App() {
           className="md:hidden"
         />
         <NavbarBrand>
-          <Link href="http://localhost:5173/product/list" className="font-text text-inherit">MONARCA INC</Link>
+          <Link isActive color="foreground" size="lg" href="http://localhost:5173/product/list"><MonarcaLogo/></Link>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="md:flex  md:gap-4" justify="center">
         {categories.map((category, index) => (
-          <NavbarItem key={index}>
+          <NavbarItem isActive key={index}>
             <Link color="foreground"  href="#" onClick={() => navigate(`/category/${category.id}`)}>
               {category.name}
             </Link>

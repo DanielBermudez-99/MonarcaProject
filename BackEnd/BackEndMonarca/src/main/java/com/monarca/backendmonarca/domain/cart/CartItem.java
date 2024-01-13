@@ -2,7 +2,9 @@ package com.monarca.backendmonarca.domain.cart;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.monarca.backendmonarca.domain.order.Orders;
 import com.monarca.backendmonarca.domain.product.Product;
 import com.monarca.backendmonarca.domain.user.User;
 import jakarta.persistence.*;
@@ -12,6 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Entity
@@ -25,6 +29,8 @@ public class CartItem {
     private Long id;
     @Column (name = "quantity")
     private int quantity;
+    @Column(name = "is_active")
+    private Boolean isActive = true;
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
@@ -35,8 +41,13 @@ public class CartItem {
     @JsonBackReference
     private Product product;
 
+    @ManyToMany(mappedBy = "cartItems")
+    @JsonManagedReference
+    private List<Orders> orders = new ArrayList<>();
+
     public CartItem(DataRegisterCartItem dataRegisterCartItem, User user, Product product) {
         this.quantity = dataRegisterCartItem.quantity();
+        this.isActive = true;
         this.user = user;
         this.product = product;
     }

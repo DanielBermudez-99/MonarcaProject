@@ -128,7 +128,7 @@ export default function App() {
           <div className="flex justify-center items-center gap-4">
             <p className="text-default-foreground">${product.price}</p>
             <Button color="primary">
-              COMPRAR
+              <b>COMPRAR</b>
             </Button>
           </div>
         </Card>

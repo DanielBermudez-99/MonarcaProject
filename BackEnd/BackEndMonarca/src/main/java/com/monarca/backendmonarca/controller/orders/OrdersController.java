@@ -1,9 +1,9 @@
 package com.monarca.backendmonarca.controller.orders;
 
+import com.monarca.backendmonarca.domain.cart.CartItem;
+import com.monarca.backendmonarca.domain.cart.CartItemRepository;
 import com.monarca.backendmonarca.domain.category.Category;
-import com.monarca.backendmonarca.domain.order.DataRegisterOrder;
-import com.monarca.backendmonarca.domain.order.Orders;
-import com.monarca.backendmonarca.domain.order.OrderRepository;
+import com.monarca.backendmonarca.domain.order.*;
 import com.monarca.backendmonarca.domain.product.Product;
 import com.monarca.backendmonarca.domain.product.ProductRepository;
 import com.monarca.backendmonarca.domain.user.User;
@@ -25,7 +25,7 @@ public class OrdersController {
     private OrderRepository orderRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private CartItemRepository cartItemRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -61,13 +61,58 @@ public class OrdersController {
             return ResponseEntity.notFound().build();
         }
 
+        // Obtener los elementos del carrito del usuario
+        List<CartItem> cartItems = cartItemRepository.findByUser(userOptional.get());
+
+        // Calcular el total sin tener que crear un nuevo campo
+        double total = 0;
+        for (CartItem cartItem : cartItems) {
+            total += cartItem.getProduct().getPrice() * cartItem.getQuantity();
+        }
+
+        // Crear la orden con el total calculado
         Orders order = new Orders(dataRegisterOrder);
         order.setUser(userOptional.get());
+        order.setTotalPrice(total);
+        order.setStatus(Status.valueOf("PENDING"));
+        order.setPayment_method(PaymentMethod.valueOf("CREDIT_CARD"));
+        order.setDate_payment(null);
+        order.setDate_delivery(null);
+        order.setDate_purchase(null);
+
         orderRepository.save(order);
         return ResponseEntity.ok(order);
     }
-    @PostMapping("/addProducts/{orderId}")
-    public ResponseEntity<?> addProductsToOrder(@PathVariable Long orderId, @RequestBody List<Long> productIds) {
+
+    // Agregar productos a una orden
+//    @PostMapping("/addProducts/{orderId}")
+//    public ResponseEntity<?> addProductsToOrder(@PathVariable Long orderId, @RequestBody List<Long> productIds) {
+//        try {
+//            Optional<Orders> orderOptional = orderRepository.findById(orderId);
+//            if (!orderOptional.isPresent()) {
+//                return ResponseEntity.notFound().build();
+//            }
+//
+//            Orders order = orderOptional.get();
+//            for (Long productId : productIds) {
+//                Optional<Product> productOptional = productRepository.findById(productId);
+//                if (!productOptional.isPresent()) {
+//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product not found for id: " + productId);
+//                }
+//
+//                Product product = productOptional.get();
+//                order.getProducts().add(product);
+//            }
+//
+//            orderRepository.save(order);
+//            return ResponseEntity.ok(order);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding products to order: " + e.getMessage());
+//        }
+//    }
+
+    @PostMapping("/addCartItems/{orderId}")
+    public ResponseEntity<?> addCartItemsToOrder(@PathVariable Long orderId) {
         try {
             Optional<Orders> orderOptional = orderRepository.findById(orderId);
             if (!orderOptional.isPresent()) {
@@ -75,22 +120,24 @@ public class OrdersController {
             }
 
             Orders order = orderOptional.get();
-            for (Long productId : productIds) {
-                Optional<Product> productOptional = productRepository.findById(productId);
-                if (!productOptional.isPresent()) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product not found for id: " + productId);
-                }
 
-                Product product = productOptional.get();
-                order.getProducts().add(product);
+            // Obtener los elementos del carrito del usuario
+            List<CartItem> cartItems = cartItemRepository.findByUser(order.getUser());
+
+            for (CartItem cartItem : cartItems) {
+                order.getCartItems().add(cartItem);
+                cartItem.setIsActive(false);
+                cartItemRepository.save(cartItem);
             }
 
             orderRepository.save(order);
             return ResponseEntity.ok(order);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding products to order: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding cartItems to order: " + e.getMessage());
         }
     }
+
+
 
 
     // Actualizar una orden existente

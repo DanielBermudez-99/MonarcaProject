@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.monarca.backendmonarca.domain.cart.CartItem;
 import com.monarca.backendmonarca.domain.product.Product;
 import com.monarca.backendmonarca.domain.user.User;
 import jakarta.persistence.*;
@@ -56,6 +57,16 @@ public class Orders {
     @JsonBackReference
     private List<Product> products = new ArrayList<>();
 
+    // En tu entidad Orders
+    @ManyToMany
+    @JoinTable(
+            name = "order_cartitem",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "cartitem_id")
+    )
+    @JsonBackReference
+    private List<CartItem> cartItems = new ArrayList<>();
+
 
     public Orders(DataRegisterOrder dataRegisterOrder) {
         this.date_purchase = dataRegisterOrder.date_purchase();
@@ -85,5 +96,9 @@ public class Orders {
         if (dataUpdateOrder.payment_method() != null) {
             this.payment_method = dataUpdateOrder.payment_method();
         }
+    }
+
+    public void setTotalPrice(double total_price) {
+        this.total_price = total_price;
     }
 }

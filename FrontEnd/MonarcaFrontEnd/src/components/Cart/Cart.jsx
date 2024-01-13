@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { Card, CardBody, CardFooter, CardHeader, Image, Button } from "@nextui-org/react";
 import { Textarea, Chip } from "@nextui-org/react";
+import { useNavigate } from 'react-router-dom';
 import api from '../Auth/api.js';
 import { jwtDecode } from 'jwt-decode';
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [userId, setUserId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
@@ -55,6 +57,37 @@ export default function Cart() {
       });
   };
 
+  const createOrder = (userId) => {
+  const total = cartItems.reduce((total, item) => total + item.productInfo.price * item.quantity, 0);
+
+  api.post(`/orders/create/${userId}`, { total_price: total })
+    .then(response => {
+      window.alert('Orden creada exitosamente');
+      console.log('Orden creada:', response.data);
+
+      // Obtener el ID de la orden que se acaba de crear
+      const orderId = response.data.id;
+      console.log('ID de la orden:', orderId);
+
+      // Añadir cada producto en el carrito a la orden
+      const cartItemIds = cartItems.map(cartItem => cartItem.id);
+      api.post(`/orders/addCartItems/${orderId}`, cartItemIds)
+        .then(response => {
+          console.log('Productos añadidos a la orden:', response.data);
+
+          // Vaciar el carrito
+          setCartItems([]);
+        })
+        .catch(error => {
+          console.error('Error al añadir los productos a la orden:', error);
+        });
+
+      navigate('/order');
+    })
+    .catch(error => {
+      console.error('Error al crear la orden:', error);
+    });
+};
   return (
     <div className="flex">
       <div className="flex flex-wrap gap-4 justify-center items-start cart-container">
@@ -132,8 +165,8 @@ export default function Cart() {
           </div>
           <br />
           <div className="flex justify-center items-center gap-4">
-            <Button color="primary">
-              PAGAR
+            <Button color="primary" onClick={() => createOrder(userId)}>
+              <b>CONTINUAR</b>
             </Button>
           </div>
         </CardBody>

@@ -69,10 +69,11 @@ public class CartController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    //El controlador anásliza si los items estan activos o no por medio del repositorio.
     @GetMapping("/{userId}")
     public ResponseEntity<List<Map<String, Object>>> getCart(@PathVariable Long userId) {
-        List<CartItem> cartItems = cartItemRepository.findByUserId(userId);
+        // Cambia esta línea para usar el nuevo método del repositorio
+        List<CartItem> cartItems = cartItemRepository.findByUserIdAndIsActiveTrue(userId);
 
         List<Map<String, Object>> cartInfo = new ArrayList<>();
 

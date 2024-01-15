@@ -6,6 +6,7 @@ import Category from "./components/Category/Category.jsx"; // Importa el compone
 import Login from "./components/Auth/Login.jsx";
 import Cart from "./components/Cart/Cart.jsx";
 import Order from "./components/Order/Order.jsx";
+import Payment from "./components/Payment/Payment.jsx";
 import {NextUIProvider} from "@nextui-org/react";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/category/:categoryId" element={<Category/>} /> 
           <Route path="/cart" element={<Cart/>}/>
           <Route path="/order" element={<Order/>}/>
+          <Route path="/payment" element={<Payment/>}/>
         </Routes>
       </Router>
     </NextUIProvider>

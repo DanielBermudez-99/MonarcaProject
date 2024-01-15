@@ -1,10 +1,8 @@
 package com.monarca.backendmonarca.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.monarca.backendmonarca.domain.cart.CartItem;
+import com.monarca.backendmonarca.domain.payment.Payment;
 import com.monarca.backendmonarca.domain.product.Product;
 import com.monarca.backendmonarca.domain.user.User;
 import jakarta.persistence.*;
@@ -13,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +66,12 @@ public class Orders {
     @JsonBackReference
     private List<CartItem> cartItems = new ArrayList<>();
 
+    // En la entidad Order
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_id")
+    @JsonBackReference
+    private Payment payment;
+
 
     public Orders(DataRegisterOrder dataRegisterOrder) {
         this.date_purchase = dataRegisterOrder.date_purchase();
@@ -100,5 +105,14 @@ public class Orders {
 
     public void setTotalPrice(double total_price) {
         this.total_price = total_price;
+    }
+
+
+    public Double getTotal() {
+        BigDecimal total = cartItems.stream()
+                .map(CartItem::getTotal)
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
+        return total.doubleValue();
     }
 }

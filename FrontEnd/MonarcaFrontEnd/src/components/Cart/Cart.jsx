@@ -82,7 +82,7 @@ export default function Cart() {
           console.error('Error al añadir los productos a la orden:', error);
         });
 
-      navigate('/order');
+      navigate('/payment');
     })
     .catch(error => {
       console.error('Error al crear la orden:', error);

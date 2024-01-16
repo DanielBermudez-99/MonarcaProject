@@ -1,6 +1,5 @@
 import React, { useEffect, useState} from "react";
 import { Card, CardBody, CardFooter, CardHeader, Image, Button } from "@nextui-org/react";
-import { Textarea, Chip } from "@nextui-org/react";
 import { useNavigate } from 'react-router-dom';
 import api from '../Auth/api.js';
 import { jwtDecode } from 'jwt-decode';
@@ -19,16 +18,6 @@ export default function Cart() {
     }
   }, []);
 
-  const handleRemoveFromCart = (productId) => {
-    api.delete(`/cart/${userId}/remove/${productId}`)
-      .then(response => {
-        setCartItems(cartItems.filter(item => item.productInfo.id !== productId));
-      })
-      .catch(error => {
-        console.error('Error al eliminar el producto del carrito:', error);
-      });
-  };
-
   useEffect(() => {
     if (userId) {
       api.get(`/cart/${userId}`)
@@ -41,35 +30,31 @@ export default function Cart() {
     }
   }, [userId]);
 
-  const handleUpdateQuantity = (productId, quantity) => {
-    const product = cartItems.find(item => item.productInfo.id === productId);
-    if (product && quantity > product.productInfo.stock) {
-      quantity = product.productInfo.stock;
-      window.alert('No hay suficiente stock de este producto.');
-    }
-
-    api.put(`/cart/${userId}/update/${productId}`, { quantity })
-      .then(response => {
-        setCartItems(cartItems.map(item => item.productInfo.id === productId ? {...item, quantity} : item));
-      })
-      .catch(error => {
-        console.error('Error al actualizar la cantidad del producto en el carrito:', error);
-      });
-  };
-
   const createOrder = (userId) => {
-    const total = cartItems.reduce((total, item) => total + item.productInfo.price * item.quantity, 0);
+  const total = cartItems.reduce((total, item) => total + item.productInfo.price * item.quantity, 0);
 
-    api.post(`/orders/create/${userId}`, { total_price: total })
-      .then(response => {
-        window.alert('Orden creada exitosamente');
-        console.log('Orden creada:', response.data);
-        navigate('/order');
-      })
-      .catch(error => {
-        console.error('Error al crear la orden:', error);
-      });
-  };
+  api.post(`/orders/create/${userId}`, { total_price: total })
+    .then(response => {
+      const orderId = response.data.id;
+      const price = response.data.total_price;
+      const orderItems = cartItems.map(item => ({
+        product_id: item.productInfo.id,
+        quantity: item.quantity,
+        price: item.productInfo.price
+      }));
+      window.alert('Orden creada exitosamente');
+      console.log('Orden creada:', response.data);
+      // Guarda el orderId en el almacenamiento local
+      localStorage.setItem('orderId', orderId);
+      localStorage.setItem('price', price);
+      localStorage.setItem('orderItems', JSON.stringify(orderItems));
+      console.log('orderId:', orderId);
+      // navigate('/payment'); // Navega al componente de pago
+    })
+    .catch(error => {
+      console.error('Error al crear la orden:', error);
+    });
+};
   return (
       <div className="flex h-screen flex-col w-full justify-start items-center">
       <Card className="max-w-xl w-full fixed">
@@ -83,7 +68,7 @@ export default function Cart() {
               </div>
             ))}
           </div>
-          <br />
+          <br/>
           <div className="flex justify-between items-center">
             <b>Total</b>
             <b className="text-foreground-900">${cartItems.reduce((total, item) => total + item.productInfo.price * item.quantity, 0,)}</b>

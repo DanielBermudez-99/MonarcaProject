@@ -68,6 +68,13 @@ export default function Cart() {
       // Obtener el ID de la orden que se acaba de crear
       const orderId = response.data.id;
       console.log('ID de la orden:', orderId);
+      localStorage.setItem('orderId', orderId);
+      const orderItems = cartItems.map(item => ({
+        product_id: item.productInfo.id,
+        quantity: item.quantity,
+        price: item.productInfo.price
+      }));
+      localStorage.setItem('orderItems', JSON.stringify(orderItems));
 
       // Añadir cada producto en el carrito a la orden
       const cartItemIds = cartItems.map(cartItem => cartItem.id);

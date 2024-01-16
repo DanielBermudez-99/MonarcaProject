@@ -1,7 +1,7 @@
 import React from "react";
 export const MasterCard = () => (
 	<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="40.000000pt" height="40.000000pt"   viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve">
+	 width="50.000000pt" height="50.000000pt"   viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve">
     <path fill="none" opacity="none" stroke="none" 
 	d="
 M123.000000,201.000000 

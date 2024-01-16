@@ -41,6 +41,11 @@ public class PaymentController {
         return ResponseEntity.of(paymentRepository.findById(id));
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Payment>> getPaymentsByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(paymentRepository.findByUserId(userId));
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody DataUpdatePayment dataUpdatePayment) {
         return paymentRepository.findById(id)

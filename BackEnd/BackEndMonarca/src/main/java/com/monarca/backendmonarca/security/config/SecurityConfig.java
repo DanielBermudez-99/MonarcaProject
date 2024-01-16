@@ -80,6 +80,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST,"/payment/create").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/payment/all").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/payment/find/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/payment/user/{userId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT,"/payment/update/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE,"/payment/delete/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/payment/{paymentId}/order/{orderId}").hasRole("ADMIN")

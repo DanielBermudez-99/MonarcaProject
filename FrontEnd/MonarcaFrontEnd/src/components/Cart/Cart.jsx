@@ -34,6 +34,7 @@ export default function Cart() {
       api.get(`/cart/${userId}`)
         .then(response => {
           setCartItems(response.data);
+          localStorage.setItem('userId', userId);
         })
         .catch(error => {
           console.error('Error al obtener los productos del carrito:', error);
@@ -59,6 +60,12 @@ export default function Cart() {
 
   const createOrder = (userId) => {
   const total = cartItems.reduce((total, item) => total + item.productInfo.price * item.quantity, 0);
+
+  api.get(`/payment/user/${userId}`)
+    .then(response => {
+      console.log('Id traído con éxito', response.data);
+      localStorage.setItem('paymentId', response.data.id);
+    })
 
   api.post(`/orders/create/${userId}`, { total_price: total })
     .then(response => {
@@ -94,6 +101,17 @@ export default function Cart() {
     .catch(error => {
       console.error('Error al crear la orden:', error);
     });
+    api.get(`/payment/user/${userId}`)
+    .then(response => {
+      if (response.data && response.data.length > 0) {
+        const paymentId = response.data[0].id;
+        console.log('Id pago es', paymentId);
+        console.log('Id traído con éxito', response.data[0]);
+        localStorage.setItem('paymentId', response.data[0].id);
+      } else {
+        console.log('No se encontraron métodos de pago para este usuario');
+      }
+    })
 };
   return (
     <div className="flex">

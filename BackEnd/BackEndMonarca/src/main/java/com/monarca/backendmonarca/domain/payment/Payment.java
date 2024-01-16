@@ -1,7 +1,9 @@
 package com.monarca.backendmonarca.domain.payment;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.monarca.backendmonarca.domain.order.Orders;
+import com.monarca.backendmonarca.domain.user.User;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -37,6 +39,13 @@ public class Payment {
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Orders> orders = new ArrayList<>();
+
+    // src/main/java/com/monarca/backendmonarca/domain/payment/Payment.java
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User user;
 
     //Son constructores que se usan para registrar el objeto Payment
     public Payment (DataRegisterPayment dataRegisterPayment) {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.monarca.backendmonarca.domain.cart.CartItem;
 import com.monarca.backendmonarca.domain.order.Orders;
+import com.monarca.backendmonarca.domain.payment.Payment;
 import com.monarca.backendmonarca.domain.pqr.Pqr;
 import jakarta.persistence.*;
 import lombok.*;
@@ -71,6 +72,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<CartItem> cartItems = new ArrayList<>();
+
+    // src/main/java/com/monarca/backendmonarca/domain/user/User.java
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private Payment payment;
 
     public User (DataRegisterUser dataRegisterUser, PasswordEncoder passwordEncoder){
         this.name = dataRegisterUser.name();

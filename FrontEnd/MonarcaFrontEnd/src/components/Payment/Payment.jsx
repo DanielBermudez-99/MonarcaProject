@@ -53,7 +53,7 @@ useEffect(() => {
 
 const payOrder = () => {
   const orderId = localStorage.getItem('orderId');
-  const paymentId = 2; // asumiendo que el id del pago es 2
+  const paymentId = localStorage.getItem('paymentId') // asumiendo que el id del pago es 2
 
   if (paymentId && orderId) {
     api.post(`/payment/${paymentId}/order/${orderId}`, {
@@ -66,6 +66,8 @@ const payOrder = () => {
         console.log('Pago asociado con la orden:', response.data);
         window.alert('Pago exitoso');
         localStorage.removeItem('orderId');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('paymentId');
         localStorage.removeItem('price');
         localStorage.removeItem('orderItems');
         navigate('/product/list');

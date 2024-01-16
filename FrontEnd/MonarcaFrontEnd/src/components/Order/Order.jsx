@@ -30,31 +30,16 @@ export default function Cart() {
     }
   }, [userId]);
 
-  const createOrder = (userId) => {
-  const total = cartItems.reduce((total, item) => total + item.productInfo.price * item.quantity, 0);
-
-  api.post(`/orders/create/${userId}`, { total_price: total })
+  api.get(`/orders/user/${userId}/pending`)
     .then(response => {
-      const orderId = response.data.id;
-      const price = response.data.total_price;
-      const orderItems = cartItems.map(item => ({
-        product_id: item.productInfo.id,
-        quantity: item.quantity,
-        price: item.productInfo.price
-      }));
-      window.alert('Orden creada exitosamente');
-      console.log('Orden creada:', response.data);
-      // Guarda el orderId en el almacenamiento local
-      localStorage.setItem('orderId', orderId);
-      localStorage.setItem('price', price);
-      localStorage.setItem('orderItems', JSON.stringify(orderItems));
-      console.log('orderId:', orderId);
-      // navigate('/payment'); // Navega al componente de pago
+        const pendingOrders = response.data;
+        // Haz algo con las órdenes pendientes
+        console.log(pendingOrders);
     })
     .catch(error => {
-      console.error('Error al crear la orden:', error);
+        console.error('Error al obtener las órdenes pendientes:', error);
     });
-};
+
   return (
       <div className="flex h-screen flex-col w-full justify-start items-center">
       <Card className="max-w-xl w-full fixed">

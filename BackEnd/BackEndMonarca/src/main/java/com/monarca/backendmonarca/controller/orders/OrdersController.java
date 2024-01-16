@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,16 +31,44 @@ public class OrdersController {
     @Autowired
     private UserRepository userRepository;
 
-    // Obtener todas las órdenes
-//    @GetMapping("/list")
-//    public List<Orders> getAllOrders() {
-//        return (List<Orders>) orderRepository.findAll();
-//    }
+    @Autowired
+    private ProductRepository productRepository;
+
 
     @GetMapping("/list")
     public ResponseEntity<?> obtenerOrders(){
         return ResponseEntity.ok(orderRepository.findAll());
     }
+
+
+    @GetMapping("/user/{userId}/pending")
+    public ResponseEntity<List<Orders>> getPendingOrdersByUserId(@PathVariable Long userId) {
+        List<Orders> allOrders = orderRepository.findByUserId(userId);
+        List<Orders> pendingOrders = new ArrayList<>();
+
+        for (Orders order : allOrders) {
+            if (order.getStatus().equals(Status.valueOf("PENDING"))) {
+                pendingOrders.add(order);
+            }
+        }
+
+        return ResponseEntity.ok(pendingOrders);
+    }
+
+    @GetMapping("/user/{userId}/paid")
+    public ResponseEntity<List<Orders>> getPaidOrdersByUserId(@PathVariable Long userId) {
+        List<Orders> allOrders = orderRepository.findByUserId(userId);
+        List<Orders> paidOrders = new ArrayList<>();
+
+        for (Orders order : allOrders) {
+            if (order.getStatus().equals(Status.valueOf("PAID"))) {
+                paidOrders.add(order);
+            }
+        }
+
+        return ResponseEntity.ok(paidOrders);
+    }
+
 
     // Obtener una orden por su ID
     @GetMapping("list/{id}")

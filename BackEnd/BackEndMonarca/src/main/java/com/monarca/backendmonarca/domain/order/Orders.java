@@ -1,6 +1,7 @@
 package com.monarca.backendmonarca.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.monarca.backendmonarca.domain.cart.CartItem;
 import com.monarca.backendmonarca.domain.payment.Payment;
 import com.monarca.backendmonarca.domain.product.Product;
@@ -63,7 +64,7 @@ public class Orders {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "cartitem_id")
     )
-    @JsonBackReference
+    @JsonManagedReference
     private List<CartItem> cartItems = new ArrayList<>();
 
     // En la entidad Order
@@ -71,7 +72,6 @@ public class Orders {
     @JoinColumn(name = "payment_id")
     @JsonBackReference
     private Payment payment;
-
 
     public Orders(DataRegisterOrder dataRegisterOrder) {
         this.date_purchase = dataRegisterOrder.date_purchase();

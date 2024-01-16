@@ -43,9 +43,13 @@ export default function App() {
     window.location.href = '/auth/login';
   };
 
+  const handleOrderClick = () => {
+    navigate('/order');
+  };
+
   const menuItems = [
     "Producto",
-    "Categoria",
+    "Mis Ordenes", 
     "Pqr",
     "Log Out",
   ];
@@ -108,7 +112,14 @@ export default function App() {
               className="w-full"
               href="#"
               size="lg"
-              onClick={item === "Log Out" ? handleLogout : null}
+              onClick={() => {
+                if (item === "Log Out") {
+                  handleLogout();
+                } else if (item === "Mis Ordenes") {
+                  handleOrderClick();
+                  setIsMenuOpen (false);
+                }
+              }}
             >
               {item}
             </Link>

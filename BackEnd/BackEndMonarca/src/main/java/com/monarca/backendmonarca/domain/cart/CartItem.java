@@ -42,7 +42,7 @@ public class CartItem {
     private Product product;
 
     @ManyToMany(mappedBy = "cartItems")
-    @JsonManagedReference
+    @JsonBackReference
     private List<Orders> orders = new ArrayList<>();
 
     public CartItem(DataRegisterCartItem dataRegisterCartItem, User user, Product product) {

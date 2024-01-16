@@ -72,6 +72,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/orders/list/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT,"/orders/update/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE,"/orders/delete/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/orders/user/{userId}/pending").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/orders/user/{userId}/paid").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/cart/{userId}/add/{productId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE,"/cart/{userId}/remove/{productId}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/cart/{userId}").hasRole("ADMIN")

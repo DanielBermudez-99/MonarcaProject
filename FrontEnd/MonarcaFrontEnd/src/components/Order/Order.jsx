@@ -1,11 +1,12 @@
-import React, { useEffect, useState} from "react";
-import { Card, CardBody, CardFooter, CardHeader, Image, Button } from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
+import { Card, CardBody, Button } from "@nextui-org/react";
 import { useNavigate } from 'react-router-dom';
 import api from '../Auth/api.js';
 import { jwtDecode } from 'jwt-decode';
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
+  const [pendingOrders, setPendingOrders] = useState([]);
   const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
 
@@ -27,45 +28,55 @@ export default function Cart() {
         .catch(error => {
           console.error('Error al obtener los productos del carrito:', error);
         });
+
+      api.get(`/orders/user/${userId}/pending`)
+        .then(response => {
+          setPendingOrders(response.data);
+        })
+        .catch(error => {
+          console.error('Error al obtener las órdenes pendientes:', error);
+        });
     }
   }, [userId]);
 
-  api.get(`/orders/user/${userId}/pending`)
-    .then(response => {
-        const pendingOrders = response.data;
-        // Haz algo con las órdenes pendientes
-        console.log(pendingOrders);
-    })
-    .catch(error => {
-        console.error('Error al obtener las órdenes pendientes:', error);
-    });
+  const createOrder = (userId) => {
+    // Implementa la lógica para crear la orden y realizar el pago
+    console.log("Orden creada y pagada con éxito");
+  };
 
   return (
-      <div className="flex h-screen flex-col w-full justify-start items-center">
-      <Card className="max-w-xl w-full fixed">
-        <CardBody>
-          <div className="mt-4">
-            <b className="text-lg font-bold">Resumen de la orden</b>
-            {cartItems.map((item, index) => (
-              <div key={index} className="flex justify-between">
-                <span>{item.productInfo.name}</span>
-                <b>x{item.quantity}</b>
+    <div className="flex gap-4 h-screen flex-col w-full justify-start items-center">
+      {pendingOrders.map((order, index) => (
+        <Card key={index} className="max-w-xl w-full mb-4">
+          <CardBody>
+            <div className="mt-4">
+              <div className="flex justify-between items-center">
+                <b className="text-lg font-bold">Orden #{order.order.id}</b>
+              <Button isIconOnly radius="none" color="foreground" aria-label="Remove" onClick={() => handleRemoveFromCart(cartItem.productInfo.id)}>
+                  X
+                </Button>
               </div>
-            ))}
-          </div>
-          <br/>
-          <div className="flex justify-between items-center">
-            <b>Total</b>
-            <b className="text-foreground-900">${cartItems.reduce((total, item) => total + item.productInfo.price * item.quantity, 0,)}</b>
-          </div>
-          <br />
-          <div className="flex justify-center items-center gap-4">
-            <Button color="primary" onClick={() => createOrder(userId)}>
-              <b>PAGAR</b>
-            </Button>
-          </div>
-        </CardBody>
-      </Card>
+              {order.cartItems.map((item, idx) => (
+                <div key={idx} className="flex justify-between">
+                  <span>{item.productName}</span>
+                  <b>x{item.quantity}</b>
+                </div>
+              ))}
+            </div>
+            <br />
+            <div className="flex justify-between items-center">
+              <b>Total</b>
+              <b className="text-foreground-900">${order.order.total}</b>
+            </div>
+            <br />
+            <div className="flex justify-center items-center gap-4">
+              <Button color="primary" onClick={() => createOrder(userId)}>
+                <b>PAGAR</b>
+              </Button>
+            </div>
+          </CardBody>
+        </Card>
+      ))}
     </div>
   );
 }

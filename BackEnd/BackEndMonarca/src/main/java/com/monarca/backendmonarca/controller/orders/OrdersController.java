@@ -13,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/orders")
@@ -42,9 +40,10 @@ public class OrdersController {
 
 
     @GetMapping("/user/{userId}/pending")
-    public ResponseEntity<List<Orders>> getPendingOrdersByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<Map<String, Object>>> getPendingOrdersWithCartItemsByUserId(@PathVariable Long userId) {
         List<Orders> allOrders = orderRepository.findByUserId(userId);
         List<Orders> pendingOrders = new ArrayList<>();
+        List<Map<String, Object>> response = new ArrayList<>();
 
         for (Orders order : allOrders) {
             if (order.getStatus().equals(Status.valueOf("PENDING"))) {
@@ -52,7 +51,22 @@ public class OrdersController {
             }
         }
 
-        return ResponseEntity.ok(pendingOrders);
+        for (Orders order : pendingOrders) {
+            Map<String, Object> orderDetails = new HashMap<>();
+            orderDetails.put("order", order);
+            List<Map<String, Object>> cartItemsDetails = new ArrayList<>();
+            for (CartItem cartItem : order.getCartItems()) {
+                Map<String, Object> cartItemDetails = new HashMap<>();
+                cartItemDetails.put("productName", cartItem.getProduct().getName());
+                cartItemDetails.put("quantity", cartItem.getQuantity());
+                cartItemDetails.put("total", cartItem.getTotal());
+                cartItemsDetails.add(cartItemDetails);
+            }
+            orderDetails.put("cartItems", cartItemsDetails);
+            response.add(orderDetails);
+        }
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/user/{userId}/paid")
@@ -91,7 +105,7 @@ public class OrdersController {
         }
 
         // Obtener los elementos del carrito del usuario
-        List<CartItem> cartItems = cartItemRepository.findByUser(userOptional.get());
+        List<CartItem> cartItems = cartItemRepository.findByUserIdAndIsActiveTrue(userOptional.get().getId());
 
         // Calcular el total sin tener que crear un nuevo campo
         double total = 0;
@@ -109,7 +123,20 @@ public class OrdersController {
         order.setDate_delivery(null);
         order.setDate_purchase(null);
 
+        // Agregar los elementos del carrito a la orden
+        for (CartItem cartItem : cartItems) {
+            order.getCartItems().add(cartItem);
+        }
+
+        // Marcar los elementos del carrito como inactivos
+        for (CartItem cartItem : cartItems) {
+            cartItem.setIsActive(false);
+            cartItemRepository.save(cartItem);
+        }
+
+        // Guardar la orden después de que los CartItem se hayan marcado como inactivos
         orderRepository.save(order);
+
         return ResponseEntity.ok(order);
     }
 
@@ -150,13 +177,13 @@ public class OrdersController {
 
             Orders order = orderOptional.get();
 
-            // Obtener los elementos del carrito del usuario
-            List<CartItem> cartItems = cartItemRepository.findByUser(order.getUser());
+            // Obtener solo los elementos del carrito del usuario que están activos
+            List<CartItem> cartItems = cartItemRepository.findByUserIdAndIsActiveTrue(order.getUser().getId());
 
             for (CartItem cartItem : cartItems) {
                 order.getCartItems().add(cartItem);
                 cartItem.setIsActive(false);
-                cartItemRepository.save(cartItem);
+                cartItemRepository.save(cartItem);  // Guardar el cambio de estado en la base de datos
             }
 
             orderRepository.save(order);

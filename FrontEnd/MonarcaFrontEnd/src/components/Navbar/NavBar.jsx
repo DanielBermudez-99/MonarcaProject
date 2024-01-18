@@ -47,8 +47,12 @@ export default function App() {
     navigate('/order');
   };
 
+  const handleOrderClickBuy = () => {
+    navigate('/buy');
+  };
+
   const menuItems = [
-    "Producto",
+    "Mis Compras",
     "Mis Ordenes", 
     "Pqr",
     "Log Out",
@@ -117,6 +121,9 @@ export default function App() {
                   handleLogout();
                 } else if (item === "Mis Ordenes") {
                   handleOrderClick();
+                  setIsMenuOpen (false);
+                }else if (item === "Mis Compras") {
+                  handleOrderClickBuy();
                   setIsMenuOpen (false);
                 }
               }}

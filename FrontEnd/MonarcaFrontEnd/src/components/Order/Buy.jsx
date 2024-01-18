@@ -32,7 +32,7 @@ export default function Cart() {
           }
         })
 
-      api.get(`/orders/user/${userId}/pending`)
+      api.get(`/orders/user/${userId}/paid`)
   .then(response => {
     if (response.data && response.data.length > 0) {
       setPendingOrders(response.data);
@@ -59,12 +59,9 @@ export default function Cart() {
         <Card key={index} className="max-w-xl w-full mb-4">
           <CardBody>
             <div className="mt-4">
-              <div className="flex justify-between items-center">
                 <b className="text-lg font-bold">Orden #{order.order.id}</b>
-              <Button isIconOnly radius="none" color="foreground" aria-label="Remove" onClick={() => handleRemoveFromCart(cartItem.productInfo.id)}>
-                  X
-                </Button>
-              </div>
+                <br/>
+                <br/>
               {order.cartItems.map((item, idx) => (
                 <div key={idx} className="flex justify-between">
                   <span>{item.productName}</span>
@@ -72,16 +69,32 @@ export default function Cart() {
                 </div>
               ))}
             </div>
+            <br/>
+            <div className="flex justify-between items-center">
+                <span>Status</span>
+                <b> {order.order.status}</b>
+            </div>
+            <div className="flex justify-between items-center">
+                <span>Método De Pago</span>
+                <b> {order.order.payment_method}</b>
+            </div>
+            <div className="flex justify-between items-center">
+                <span>Fecha De la compra</span>
+                <b> {order.order.date_purchase}</b>
+            </div>
+            <div className="flex justify-between items-center">
+                <span>Fecha Del Pago</span>
+                <b> {order.order.date_payment}</b>
+            </div>
+            <div className="flex justify-between items-center">
+                <span>Fecha De Entrega</span>
+                <b> {order.order.date_delivery}</b>
+            </div>
+            
             <br />
             <div className="flex justify-between items-center">
               <b>Total</b>
               <b className="text-foreground-900">${order.order.total}</b>
-            </div>
-            <br />
-            <div className="flex justify-center items-center gap-4">
-              <Button color="primary" onClick={() => redirection(userId)}>
-                <b>PAGAR</b>
-              </Button>
             </div>
           </CardBody>
         </Card>

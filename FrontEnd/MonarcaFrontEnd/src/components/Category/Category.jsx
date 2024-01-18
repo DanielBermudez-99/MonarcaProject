@@ -100,8 +100,14 @@ export default function Category() {
               </CardFooter>
               <div className="flex justify-center items-center gap-4">
                 <p className="text-default-foreground">${product.price}</p>
-                <Button color="primary" >
-                  <b>COMPRAR</b>
+                <Button color="primary" onClick={() => {
+                  if (userId !== null) {
+                    handleAddToCart(product.id);
+                  } else {
+                    console.error('El ID del usuario es null. Asegúrate de que el token JWT esté presente y sea válido.');
+                  }
+                }}>
+                  <b>COMPRAR</b> 
                 </Button>
               </div>
             </Card>

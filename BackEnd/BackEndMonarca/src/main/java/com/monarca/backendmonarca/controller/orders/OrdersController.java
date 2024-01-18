@@ -70,19 +70,34 @@ public class OrdersController {
     }
 
     @GetMapping("/user/{userId}/paid")
-    public ResponseEntity<List<Orders>> getPaidOrdersByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<Map<String, Object>>> getPaidOrdersWithCartItemsByUserId(@PathVariable Long userId) {
         List<Orders> allOrders = orderRepository.findByUserId(userId);
-        List<Orders> paidOrders = new ArrayList<>();
+        List<Orders> pendingOrders = new ArrayList<>();
+        List<Map<String, Object>> response = new ArrayList<>();
 
         for (Orders order : allOrders) {
             if (order.getStatus().equals(Status.valueOf("PAID"))) {
-                paidOrders.add(order);
+                pendingOrders.add(order);
             }
         }
 
-        return ResponseEntity.ok(paidOrders);
-    }
+        for (Orders order : pendingOrders) {
+            Map<String, Object> orderDetails = new HashMap<>();
+            orderDetails.put("order", order);
+            List<Map<String, Object>> cartItemsDetails = new ArrayList<>();
+            for (CartItem cartItem : order.getCartItems()) {
+                Map<String, Object> cartItemDetails = new HashMap<>();
+                cartItemDetails.put("productName", cartItem.getProduct().getName());
+                cartItemDetails.put("quantity", cartItem.getQuantity());
+                cartItemDetails.put("total", cartItem.getTotal());
+                cartItemsDetails.add(cartItemDetails);
+            }
+            orderDetails.put("cartItems", cartItemsDetails);
+            response.add(orderDetails);
+        }
 
+        return ResponseEntity.ok(response);
+    }
 
     // Obtener una orden por su ID
     @GetMapping("list/{id}")
@@ -140,32 +155,6 @@ public class OrdersController {
         return ResponseEntity.ok(order);
     }
 
-    // Agregar productos a una orden
-//    @PostMapping("/addProducts/{orderId}")
-//    public ResponseEntity<?> addProductsToOrder(@PathVariable Long orderId, @RequestBody List<Long> productIds) {
-//        try {
-//            Optional<Orders> orderOptional = orderRepository.findById(orderId);
-//            if (!orderOptional.isPresent()) {
-//                return ResponseEntity.notFound().build();
-//            }
-//
-//            Orders order = orderOptional.get();
-//            for (Long productId : productIds) {
-//                Optional<Product> productOptional = productRepository.findById(productId);
-//                if (!productOptional.isPresent()) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Product not found for id: " + productId);
-//                }
-//
-//                Product product = productOptional.get();
-//                order.getProducts().add(product);
-//            }
-//
-//            orderRepository.save(order);
-//            return ResponseEntity.ok(order);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding products to order: " + e.getMessage());
-//        }
-//    }
 
     @PostMapping("/addCartItems/{orderId}")
     public ResponseEntity<?> addCartItemsToOrder(@PathVariable Long orderId) {

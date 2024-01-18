@@ -7,6 +7,7 @@ import Login from "./components/Auth/Login.jsx";
 import Cart from "./components/Cart/Cart.jsx";
 import Order from "./components/Order/Order.jsx";
 import Payment from "./components/Payment/Payment.jsx";
+import Buy from "./components/Order/Buy.jsx";
 import {NextUIProvider} from "@nextui-org/react";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/cart" element={<Cart/>}/>
           <Route path="/order" element={<Order/>}/>
           <Route path="/payment" element={<Payment/>}/>
+          <Route path="/buy" element={<Buy/>} />
         </Routes>
       </Router>
     </NextUIProvider>

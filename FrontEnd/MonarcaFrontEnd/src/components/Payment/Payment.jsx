@@ -70,7 +70,7 @@ const payOrder = () => {
         localStorage.removeItem('paymentId');
         localStorage.removeItem('price');
         localStorage.removeItem('orderItems');
-        navigate('/product/list');
+        navigate('/buy');
       })
       .catch(error => {
         console.error('Error al asociar el pago con la orden:', error);

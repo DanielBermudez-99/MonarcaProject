@@ -15,4 +15,5 @@ public interface CartItemRepository extends CrudRepository<CartItem, Long> {
 
     // Nuevo método para obtener solo los cartItems activos de un usuario
     List<CartItem> findByUserIdAndIsActiveTrue(Long userId);
+    List<CartItem> findByUserIdAndIsActiveFalse(Long userId);
 }

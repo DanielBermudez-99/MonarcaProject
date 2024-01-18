@@ -100,6 +100,49 @@ public class CartController {
         return ResponseEntity.ok(cartInfo);
     }
 
+    @GetMapping("/{userId}/active")
+    public ResponseEntity<List<Map<String, Object>>> getActiveCart(@PathVariable Long userId) {
+        List<CartItem> cartItems = cartItemRepository.findByUserIdAndIsActiveTrue(userId);
+
+        List<Map<String, Object>> cartInfo = new ArrayList<>();
+        for (CartItem cartItem : cartItems) {
+            Long productId = cartItem.getProduct().getId();
+            Optional<Product> productOptional = productRepository.findById(productId);
+            if (productOptional.isPresent()) {
+                Product product = productOptional.get();
+                Map<String, Object> cartItemInfo = new HashMap<>();
+                cartItemInfo.put("productInfo", product);
+                cartItemInfo.put("quantity", cartItem.getQuantity());
+                cartItemInfo.put("total", cartItem.getTotal());
+                cartItemInfo.put("productId", productId);
+                cartInfo.add(cartItemInfo);
+            }
+        }
+
+        return ResponseEntity.ok(cartInfo);
+    }
+
+    @GetMapping("/{userId}/inactive")
+    public ResponseEntity<List<Map<String, Object>>> getInactiveCart(@PathVariable Long userId) {
+        List<CartItem> cartItems = cartItemRepository.findByUserIdAndIsActiveFalse(userId);
+
+        List<Map<String, Object>> cartInfo = new ArrayList<>();
+        for (CartItem cartItem : cartItems) {
+            Long productId = cartItem.getProduct().getId();
+            Optional<Product> productOptional = productRepository.findById(productId);
+            if (productOptional.isPresent()) {
+                Product product = productOptional.get();
+                Map<String, Object> cartItemInfo = new HashMap<>();
+                cartItemInfo.put("productInfo", product);
+                cartItemInfo.put("quantity", cartItem.getQuantity());
+                cartItemInfo.put("total", cartItem.getTotal());
+                cartItemInfo.put("productId", productId);
+                cartInfo.add(cartItemInfo);
+            }
+        }
+
+        return ResponseEntity.ok(cartInfo);
+    }
     @GetMapping("/{userId}/total")
     public ResponseEntity<BigDecimal> getTotal(@PathVariable Long userId) {
         List<CartItem> cartItems = cartItemRepository.findByUserId(userId);

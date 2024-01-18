@@ -31,7 +31,7 @@ export default function Cart() {
 
   useEffect(() => {
     if (userId) {
-      api.get(`/cart/${userId}`)
+      api.get(`/cart/${userId}/active`)
         .then(response => {
           setCartItems(response.data);
           localStorage.setItem('userId', userId);

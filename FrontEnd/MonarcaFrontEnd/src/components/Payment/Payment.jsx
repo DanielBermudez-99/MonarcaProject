@@ -27,7 +27,7 @@ export default function App() {
 
   useEffect(() => {
     if (userId) {
-      api.get(`/cart/${userId}`)
+      api.get(`/cart/${userId}/inactive`)
         .then(response => {
           setCartItems(response.data);
         })

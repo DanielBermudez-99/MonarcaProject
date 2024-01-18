@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +26,8 @@ public class PaymentController {
 
     @Autowired
     private OrderRepository ordersRepository;
+
+    private LocalDateTime purchaseTime;
 
     @PostMapping("/create")
     public ResponseEntity<Payment> createPayment(@RequestBody DataRegisterPayment dataRegisterPayment) {
@@ -85,6 +89,9 @@ public class PaymentController {
 
                 // Cambia el estado de la orden a "pagado"
                 order.setStatus(Status.valueOf("PAID"));
+                order.setDate_payment(LocalDate.now());
+                order.setDate_delivery(null);
+                order.setDate_purchase(LocalDate.now());
 
                 // Guarda la orden en la base de datos
                 ordersRepository.save(order);

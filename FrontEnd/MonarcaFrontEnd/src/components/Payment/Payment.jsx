@@ -53,7 +53,8 @@ useEffect(() => {
 
 const payOrder = () => {
   const orderId = localStorage.getItem('orderId');
-  const paymentId = localStorage.getItem('paymentId') // asumiendo que el id del pago es 2
+  const paymentId = localStorage.getItem('paymentId')
+  // asumiendo que el id del pago es 2
 
   if (paymentId && orderId) {
     api.post(`/payment/${paymentId}/order/${orderId}`, {
@@ -90,7 +91,7 @@ const payOrder = () => {
             {cartItems.map((item, index) => (
               <div key={index} className="flex justify-between">
                 <span>{item.productInfo.name}</span>
-                <b>x{item.quantity}</b>
+                <b>{item.quantity}</b>
               </div>
             ))}
           </div>

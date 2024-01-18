@@ -5,12 +5,14 @@ import {Textarea} from "@nextui-org/react";
 import api from '../Auth/api.js'; // Importa la instancia de axios con el interceptor
 import { useParams } from 'react-router-dom'; // Importa el hook useParams
 import { CartLogo } from "../Navbar/CartLogo.jsx";
+import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
 export default function Category() {
   const [products, setProducts] = useState([]); // Crea un estado para almacenar los productos
   const { categoryId } = useParams(); // Obtiene el parámetro de ruta categoryId
   const [userId, setUserId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('jwt');
@@ -56,6 +58,7 @@ export default function Category() {
       // Manejar la respuesta exitosa
       window.alert('Producto agregado al carrito');
       console.log('Producto agregado al carrito:', response.data);
+      window.location.reload();
     }
   } catch (error) {
     // Manejar errores en la obtención del carrito o al agregar el producto
@@ -103,6 +106,7 @@ export default function Category() {
                 <Button color="primary" onClick={() => {
                   if (userId !== null) {
                     handleAddToCart(product.id);
+                    navigate('/cart');
                   } else {
                     console.error('El ID del usuario es null. Asegúrate de que el token JWT esté presente y sea válido.');
                   }

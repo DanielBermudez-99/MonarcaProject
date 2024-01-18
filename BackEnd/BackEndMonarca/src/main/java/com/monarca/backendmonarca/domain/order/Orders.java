@@ -14,6 +14,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,6 +74,8 @@ public class Orders {
     @JsonBackReference
     private Payment payment;
 
+    private LocalDateTime purchaseTime;
+
     public Orders(DataRegisterOrder dataRegisterOrder) {
         this.date_purchase = dataRegisterOrder.date_purchase();
         this.date_payment = dataRegisterOrder.date_payment();
@@ -80,6 +83,7 @@ public class Orders {
         this.total_price = dataRegisterOrder.total_price();
         this.status = dataRegisterOrder.status();
         this.payment_method = dataRegisterOrder.payment_method();
+        this.purchaseTime = LocalDateTime.now();
     }
 
     public void dataUpdate(DataUpdateOrder dataUpdateOrder) {

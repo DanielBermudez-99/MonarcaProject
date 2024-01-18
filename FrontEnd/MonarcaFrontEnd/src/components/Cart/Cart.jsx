@@ -35,13 +35,14 @@ export default function Cart() {
         .then(response => {
           setCartItems(response.data);
           localStorage.setItem('userId', userId);
+          localStorage.setItem('cartItems', JSON.stringify(response.data));
         })
         .catch(error => {
           console.error('Error al obtener los productos del carrito:', error);
         });
     }
   }, [userId]);
-
+  
   const handleUpdateQuantity = (productId, quantity) => {
     const product = cartItems.find(item => item.productInfo.id === productId);
     if (product && quantity > product.productInfo.stock) {
@@ -121,8 +122,8 @@ export default function Cart() {
             <CardBody className="overflow-visible p-0 w-13">
               <div className="flex justify-between items-center">
                 <b>{cartItem.productInfo.name}</b>
-                <Button isIconOnly radius="none" color="foreground" aria-label="Remove" onClick={() => handleRemoveFromCart(cartItem.productInfo.id)}>
-                  X
+                <Button  isIconOnly radius="none" color="foreground" aria-label="Remove" onClick={() => handleRemoveFromCart(cartItem.productInfo.id)}>
+                  <b>X</b> 
                 </Button>
               </div>
               <Image
@@ -179,7 +180,7 @@ export default function Cart() {
             {cartItems.map((item, index) => (
               <div key={index} className="flex justify-between">
                 <span>{item.productInfo.name}</span>
-                <b>x{item.quantity}</b>
+                <b>{item.quantity}</b>
               </div>
             ))}
           </div>

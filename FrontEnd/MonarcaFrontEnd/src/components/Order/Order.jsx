@@ -53,6 +53,15 @@ export default function Cart() {
     navigate('/payment');
   };
 
+  const handleRemoveOrder = async (orderId) => {
+    try {
+      const response = await api.delete(`/orders/delete/${orderId}`);
+      console.log('Orden eliminada con éxito:', response.data);
+      window.location.reload();
+    } catch (error) {
+      console.error('Error al eliminar la orden:', error);
+    }
+  }
   return (
     <div className="flex gap-4 h-screen flex-col w-full justify-start items-center">
       {pendingOrders.map((order, index) => (
@@ -61,14 +70,14 @@ export default function Cart() {
             <div className="mt-4">
               <div className="flex justify-between items-center">
                 <b className="text-lg font-bold">Orden #{order.order.id}</b>
-              <Button isIconOnly radius="none" color="foreground" aria-label="Remove" onClick={() => handleRemoveFromCart(cartItem.productInfo.id)}>
-                  X
+              <Button className="flex justify-end" isIconOnly radius="none" color="foreground" aria-label="Remove" onClick={() => handleRemoveOrder(order.order.id)}>
+                  <b>X</b>
                 </Button>
               </div>
               {order.cartItems.map((item, idx) => (
                 <div key={idx} className="flex justify-between">
                   <span>{item.productName}</span>
-                  <b>x{item.quantity}</b>
+                  <b>{item.quantity}</b>
                 </div>
               ))}
             </div>

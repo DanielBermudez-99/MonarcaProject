@@ -65,7 +65,7 @@ export default function Cart() {
               {order.cartItems.map((item, idx) => (
                 <div key={idx} className="flex justify-between">
                   <span>{item.productName}</span>
-                  <b>x{item.quantity}</b>
+                  <b>{item.quantity}</b>
                 </div>
               ))}
             </div>

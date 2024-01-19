@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/user")
 @CrossOrigin
@@ -23,9 +25,13 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+
     @PostMapping("/register")
     public ResponseEntity<User> crearUsuario(@RequestBody DataRegisterUser dataRegisterUser) {
-        User newUser = userRepository.save(new User(dataRegisterUser, passwordEncoder));
+        User newUser = new User(dataRegisterUser, passwordEncoder);
+        newUser.setRegisterTime(LocalDateTime.now()); // Establecer la hora de registro a la hora actual
+        newUser = userRepository.save(newUser);
         return ResponseEntity.ok(newUser);
     }
 

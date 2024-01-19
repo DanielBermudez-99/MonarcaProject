@@ -12,6 +12,7 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,6 +80,8 @@ public class User {
     @JsonManagedReference
     private Payment payment;
 
+    private LocalDateTime registerTime;
+
     public User (DataRegisterUser dataRegisterUser, PasswordEncoder passwordEncoder){
         this.name = dataRegisterUser.name();
         this.lastname = dataRegisterUser.lastname();
@@ -86,7 +89,7 @@ public class User {
         //Utilizamos el password encoder para encriptar la contraseña
         this.password = passwordEncoder.encode(dataRegisterUser.password());
 //        this.password = passwordEncoder.encode(dataRegisterUser.password());
-        this.email = dataRegisterUser.email();
+        this.email = dataRegisterUser.username();
         this.phone = dataRegisterUser.phone();
         this.location = dataRegisterUser.location();
         this.complement = dataRegisterUser.complement();
@@ -95,9 +98,10 @@ public class User {
         this.street = dataRegisterUser.street();
         this.number = dataRegisterUser.number();
         this.date_register = LocalDate.now();
-        this.role = Role.valueOf(dataRegisterUser.role());
+        this.role = Role.ADMIN;
         this.disabled = false;
         this.locked = false;
+        this.registerTime = LocalDateTime.now();
     }
 
 
@@ -144,7 +148,6 @@ public class User {
         if (dataUpdateUser.role() != null) {
             this.role = Role.valueOf(dataUpdateUser.role());
         }
-
     }
 
 

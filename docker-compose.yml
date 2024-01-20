@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  database:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: rootpassword
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+  java-app:
+    build: BackEnd/BackEndMonarca
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/testdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpassword
+
+  vite-app:
+    image: node:alpine
+    container_name: vite-app
+    entrypoint: /bin/sh
+    ports:
+      - "3000:3000"
+    working_dir: /srv/app
+    volumes:
+      - type: bind
+        source: FrontEnd
+        target: /srv/app
+    tty: true
+
+volumes:
+  db_data:

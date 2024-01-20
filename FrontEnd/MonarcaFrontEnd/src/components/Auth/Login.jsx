@@ -2,6 +2,7 @@ import React from "react";
 import {Tabs, Tab, Input, Link, Button, Card, CardBody, CardHeader} from "@nextui-org/react";
 import { EyeFilledIcon } from "./EyeFilledIcon";
 import { EyeSlashFilledIcon } from "./EyeSlashFilledIcon";
+import {MonarcaLogo} from "../Navbar/MonarcaLogo.jsx";
 import api from './api.js'; // Importa la instancia de axios con el interceptor
 
 export default function App() {
@@ -21,6 +22,8 @@ export default function App() {
 
   //Validación nombre
   const [value1, setValue1] = React.useState("");
+  const [value2, setValue2] = React.useState("");
+
 
   //Validación Autenticación
   const handleLogin = async (event) => {
@@ -47,12 +50,35 @@ export default function App() {
       // manejar error de red
     }
 }
+  const RegisterLogin = async (event) => {
+    event.preventDefault();
+
+    const userCredentials = {
+      name: value2,
+      username: value, 
+      password: value1,
+    };
+
+    try {
+      const response = await api.post('/user/register', userCredentials); // usa 'api' en lugar de 'axios'
+      if (response.status === 200) {
+        window.alert('Usuario creado con éxito.');
+        window.location.href = 'http://localhost:5173/auth/login';
+      } else {
+        console.log('Error al crear usuario');
+      }
+    } catch (error) {
+      window.alert('Error al iniciar sesión, comprueba tus datos.');
+      console.error('Error al iniciar sesión:', error);
+      // manejar error de red
+    }
+}
 
   return (
     <div className=" flex justify-center items-center h-screen ">
       <Card className="max-w-lg w-full " >
         <CardHeader className="pb-0 pt-2 px-4 flex-col items-center">
-          <h6 className="font-Roboto Condensed">MONARCA INC</h6>
+          <MonarcaLogo/>
         </CardHeader>
         <CardBody className="overflow-hidden">
           <Tabs
@@ -129,9 +155,10 @@ export default function App() {
                   isClearable
                   isRequired
                   type="Text"
-                  label="Nombre"
+                  label="Nombre Y Apellido"
                   variant="bordered"
                   placeholder="Ingresa tu nombre"
+                  onValueChange={setValue2}
                   color="primary"
                   onClear={() => console.log("input cleared")}
                   className="max-w-md mx-auto"
@@ -180,9 +207,7 @@ export default function App() {
                   </Link>
                 </p>
                 <div className="flex gap-2 justify-center">
-                  <Button color="primary">
-                    Registrarme
-                  </Button>
+                  <Button color="primary" onClick={RegisterLogin}>Registrarme</Button>
                 </div>
               </form>
             </Tab>

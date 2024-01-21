@@ -66,7 +66,7 @@ export default function App() {
           className="md:hidden"
         />
         <NavbarBrand>
-          <Link isActive color="foreground" size="lg" href="http://localhost:5173/product/list"><MonarcaLogo/></Link>
+          <Link isActive color="foreground" size="lg" href="http://localhost:3000/product/list"><MonarcaLogo/></Link>
         </NavbarBrand>
       </NavbarContent>
 
@@ -87,7 +87,7 @@ export default function App() {
               <Link href="">Login</Link>
             </NavbarItem>
             <NavbarItem>
-              <Button as={Link} color="primary" href="http://localhost:5173/auth/login" variant="flat">
+              <Button as={Link} color="primary" href="http://localhost:3000/auth/login" variant="flat">
                 Registrarse
               </Button>
             </NavbarItem>
@@ -95,7 +95,7 @@ export default function App() {
         )}
       {isAuthenticated && (
       <div className="flex gap-4 items-center">
-        <Button isIconOnly  color="foreground" as={Link} href="http://localhost:5173/cart" aria-label="Add">
+        <Button isIconOnly  color="foreground" as={Link} href="http://localhost:3000/cart" aria-label="Add">
           <CartLogo />
         </Button>
         </div>

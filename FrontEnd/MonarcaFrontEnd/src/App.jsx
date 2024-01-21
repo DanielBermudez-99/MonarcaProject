@@ -16,7 +16,7 @@ function App() {
       <Router>
         <NavBar/>
         <Routes>
-          <Route path="localhost:5173" element={<Login/>} />
+          <Route path="localhost:3000" element={<Login/>} />
           <Route path="/auth/login" element={<Login/>} />
           <Route path="/product/list" element={<Product/>} />
           <Route path="/category/:categoryId" element={<Category/>} /> 

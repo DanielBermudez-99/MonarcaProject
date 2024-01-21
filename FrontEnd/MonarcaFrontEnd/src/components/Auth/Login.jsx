@@ -40,7 +40,7 @@ export default function App() {
         const token = response.data.jwt; // obtén el token del cuerpo de la respuesta
         console.log('Token:', token);
         localStorage.setItem('jwt', token); // guarda el token en el almacenamiento local
-        window.location.href = 'http://localhost:5173/product/list';
+        window.location.href = 'http://localhost:3000/product/list';
       } else {
         // manejar error de inicio de sesión
       }
@@ -63,7 +63,7 @@ export default function App() {
       const response = await api.post('/user/register', userCredentials); // usa 'api' en lugar de 'axios'
       if (response.status === 200) {
         window.alert('Usuario creado con éxito.');
-        window.location.href = 'http://localhost:5173/auth/login';
+        window.location.href = 'http://localhost:3000/auth/login';
       } else {
         console.log('Error al crear usuario');
       }
